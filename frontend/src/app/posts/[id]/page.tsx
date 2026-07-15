@@ -79,13 +79,13 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
       <h1 className="mt-3 font-serif text-[40px] leading-tight font-bold text-ink">{post.title}</h1>
 
       <div className="mt-5 flex items-center justify-between">
-        <Link href={`/u/${post.author.handle}`} className="flex items-center gap-3">
+        <div className="flex items-center gap-3">
           <Avatar src={post.author.avatarUrl} size={46} />
           <div>
             <p className="text-sm font-semibold text-text">{post.author.username}</p>
             <p className="text-xs text-faint">{new Date(post.createdAt).toLocaleDateString()} · {post.readTime} min read</p>
           </div>
-        </Link>
+        </div>
         {isOwner(post.author.id) && (
           <div className="flex gap-2">
             <Link href={`/posts/${id}/edit`}><Button variant="secondary">✎ Edit</Button></Link>
