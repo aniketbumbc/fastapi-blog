@@ -17,7 +17,7 @@ export default function Header() {
       <div className="h-full max-w-[1120px] mx-auto px-5 flex items-center gap-4">
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
           <span className="w-[30px] h-[30px] grid place-items-center rounded-lg bg-primary text-ink font-serif font-bold">B</span>
-          <span className="font-serif font-bold text-lg text-ink">Blog API</span>
+          <span className="font-serif font-bold text-lg text-ink">Learn Stack</span>
         </Link>
         <input
           value={searchQuery}

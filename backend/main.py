@@ -27,8 +27,8 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(
-    title="Blog API",
-    description="A simple blog API with users and posts",
+    title="Learn Stack",
+    description="A simple Learn Stack with users and posts",
     version="1.0.0",
     lifespan=lifespan,
 )

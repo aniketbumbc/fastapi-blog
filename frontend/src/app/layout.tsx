@@ -8,7 +8,7 @@ const ui = Public_Sans({ subsets: ["latin"], variable: "--font-ui-loaded", weigh
 const serif = Source_Serif_4({ subsets: ["latin"], variable: "--font-serif-loaded", weight: ["400","500","600","700"], style: ["normal","italic"] });
 const mono = IBM_Plex_Mono({ subsets: ["latin"], variable: "--font-mono-loaded", weight: ["400","500"] });
 
-export const metadata: Metadata = { title: "Blog API", description: "A content-first publishing platform." };
+export const metadata: Metadata = { title: "Learn Stack", description: "A content-first publishing platform." };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
