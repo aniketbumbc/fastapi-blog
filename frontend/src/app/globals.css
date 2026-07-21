@@ -68,3 +68,25 @@ body { font-family: var(--font-ui); -webkit-font-smoothing: antialiased; }
   background-image: repeating-linear-gradient(45deg,
     var(--color-divider) 0 12px, var(--color-surface) 12px 24px);
 }
+
+/* shimmer sweep for loading skeletons */
+@keyframes shimmer-sweep {
+  100% { transform: translateX(100%); }
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-divider);
+}
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .5), transparent);
+  animation: shimmer-sweep 1.6s ease-in-out infinite;
+}
+.dark .shimmer::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .09), transparent);
+}
