@@ -55,10 +55,28 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
 
   if (postStatus === "loading" || postStatus === "idle") {
     return (
-      <div className="max-w-[680px] mx-auto py-4 space-y-4 animate-pulse">
-        <div className="h-6 w-20 bg-divider rounded-full" />
-        <div className="h-10 w-full bg-divider rounded" />
-        <div className="h-6 w-2/3 bg-divider rounded" />
+      <div className="max-w-[680px] mx-auto py-4">
+        <div className="h-6 w-20 rounded-full shimmer shimmer-gray" />
+        <div className="mt-3 h-10 w-full rounded shimmer shimmer-gray" />
+        <div className="mt-2 h-10 w-2/3 rounded shimmer shimmer-gray" />
+
+        <div className="mt-5 flex items-center gap-3">
+          <div className="w-[46px] h-[46px] rounded-full shimmer shimmer-gray" />
+          <div className="space-y-2">
+            <div className="h-4 w-32 rounded shimmer shimmer-gray" />
+            <div className="h-3 w-24 rounded shimmer shimmer-gray" />
+          </div>
+        </div>
+
+        <div className="mt-6 h-80 rounded-2xl shimmer shimmer-gray" />
+
+        <div className="mt-8 space-y-3">
+          <div className="h-4 w-full rounded shimmer shimmer-gray" />
+          <div className="h-4 w-full rounded shimmer shimmer-gray" />
+          <div className="h-4 w-5/6 rounded shimmer shimmer-gray" />
+          <div className="h-4 w-full rounded shimmer shimmer-gray" />
+          <div className="h-4 w-2/3 rounded shimmer shimmer-gray" />
+        </div>
       </div>
     );
   }
