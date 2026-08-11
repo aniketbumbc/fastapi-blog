@@ -1,102 +1,169 @@
 @import "tailwindcss";
 
+/* ---- Design tokens -> Tailwind utilities (bg-paper, text-ink, font-display, ...) ---- */
 @theme {
-  /* light */
-  --color-primary: #91C11E;
-  --color-primary-hover: #6F9E16;
-  --color-accent: #55810F;
-  --color-tint: #F0F7DD;
-  --color-tint-border: #DCEBB4;
-  --color-ink: #10151F;
-  --color-text: #1A2230;
-  --color-muted: #66707F;
-  --color-subtle: #8792A2;
-  --color-faint: #A9B2BE;
-  --color-border: #E2E8F1;
-  --color-border-strong: #D7DEEA;
-  --color-divider: #EEF1F6;
-  --color-surface: #F7F9FC;
-  --color-page: #EEF1F6;
-  --color-danger: #D33A2C;
-  --color-danger-bg: #FDECEA;
-  --color-danger-border: #F0C5C0;
-  --color-success: #1F8A5B;
-  --color-success-dot: #37C98A;
+  --color-paper:        #FBFCF5;
+  --color-grid:         #E4EDD8;
+  --color-grid-strong:  #D7E4C6;
+  --color-ink:          #22426A;
+  --color-ink-soft:     #4E6B8C;
+  --color-marker:       #C63A2B;
+  --color-marker-soft:  #D8654F;
+  --color-highlight:    #FBEE8C;
+  --color-margin-line:  #E4A9A0;
+  --color-hole:         #E7E7DE;
+  --color-ring:         #B9BCB4;
+  --color-folio:        #8A97A6;
 
-  --font-ui: "Public Sans", system-ui, sans-serif;
-  --font-serif: "Source Serif 4", Georgia, serif;
-  --font-mono: "IBM Plex Mono", monospace;
-
-  --radius-card: 16px;
-  --radius-input: 9px;
-  --shadow-card: 0 14px 44px -26px rgba(16,21,31,.45);
-  --shadow-modal: 0 30px 70px -24px rgba(16,21,31,.55);
+  /* Wired to next/font CSS variables (see app/layout.tsx). */
+  --font-display: var(--font-caveat), cursive;
+  --font-body:    var(--font-kalam), cursive;
+  --font-mono:    var(--font-jetbrains), ui-monospace, monospace;
 }
 
-/* dark theme via .dark on <html> */
-.dark {
-  --color-primary: #A3D129;
-  --color-tint: #24350F;
-  --color-accent: #B6E35A;
-  --color-ink: #E8EDF4;
-  --color-text: #C3CCD8;
-  --color-muted: #9AA4B3;
-  --color-subtle: #9AA4B3;
-  --color-faint: #6B7686;
-  --color-border: #27303D;
-  --color-border-strong: #27303D;
-  --color-divider: #212B38;
-  --color-surface: #0F1621;
-  --color-page: #0B0F16;
-  --color-danger: #FF6B5B;
-  --color-danger-bg: #2a1512;
-  --color-danger-border: #4a201b;
+:root {
+  --nb-grid: 22px; /* graph-paper square size */
 }
 
-html, body { background: var(--color-page); color: var(--color-text); }
-body { font-family: var(--font-ui); -webkit-font-smoothing: antialiased; }
+/* ---- Notebook texture: the ~60% that Tailwind utilities can't express ---- */
+@layer components {
+  .notebook-paper {
+    background-color: var(--color-paper);
+    background-image:
+      linear-gradient(var(--color-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px),
+      linear-gradient(var(--color-grid-strong) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid-strong) 1px, transparent 1px);
+    background-size:
+      var(--nb-grid) var(--nb-grid),
+      var(--nb-grid) var(--nb-grid),
+      calc(var(--nb-grid) * 5) calc(var(--nb-grid) * 5),
+      calc(var(--nb-grid) * 5) calc(var(--nb-grid) * 5);
+  }
 
-/* shared focus ring */
-.focus-ring:focus-visible {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-tint);
-}
+  .notebook-margin-rule {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-margin-line);
+    opacity: 0.75;
+    z-index: 1;
+  }
 
-/* striped placeholder for missing cover/avatar imagery */
-.placeholder-stripes {
-  background-image: repeating-linear-gradient(45deg,
-    var(--color-divider) 0 12px, var(--color-surface) 12px 24px);
-}
+  .notebook-binding {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 52px;
+    padding: 26px 0;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .notebook-hole {
+    position: relative;
+    width: 15px;
+    height: 15px;
+    border-radius: 9999px;
+    background: var(--color-hole);
+    box-shadow:
+      inset 0 2px 3px rgba(0, 0, 0, 0.35),
+      inset 0 -1px 1px rgba(255, 255, 255, 0.6);
+  }
+  .notebook-hole::after {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: -6px;
+    width: 26px;
+    height: 12px;
+    border: 2.5px solid var(--color-ring);
+    border-radius: 9999px;
+    border-bottom-color: transparent;
+    transform: rotate(-14deg);
+  }
 
-/* shimmer sweep for loading skeletons */
-@keyframes shimmer-sweep {
-  100% { transform: translateX(100%); }
-}
+  .book-shell {
+    border-radius: 4px;
+    box-shadow:
+      0 24px 48px -12px rgba(0, 0, 0, 0.45),
+      0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+  /* faint centre crease for the spread */
+  .book-shell--spread::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 40px;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 0, 0, 0.06),
+      transparent
+    );
+    z-index: 3;
+    pointer-events: none;
+  }
+  .book-gutter {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .book-gutter--left {
+    left: 0;
+    transform: none;
+  }
 
-.shimmer {
-  position: relative;
-  overflow: hidden;
-  background: #DDE2EA;
-}
-.shimmer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .5), transparent);
-  animation: shimmer-sweep 1.6s ease-in-out infinite;
-}
-.dark .shimmer {
-  background: #182230;
-}
-.dark .shimmer::after {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .09), transparent);
-}
+  /* Ruled-paper background for blog cards (horizontal rules only). */
+  .notebook-lined {
+    background-color: var(--color-paper);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 27px,
+      var(--color-grid) 27px,
+      var(--color-grid) 28px
+    );
+  }
 
-.shimmer-gray {
-  background: #d2d8e1;
-}
-.dark .shimmer-gray {
-  background: #20242B;
+  /* Styling for inline HTML injected via dangerouslySetInnerHTML.
+     Wrap the container in `nb-inline` so these selectors apply. */
+  .nb-inline strong {
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+  .nb-inline em {
+    font-style: italic;
+  }
+  .nb-inline code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--color-ink-soft);
+    border-radius: 4px;
+    padding: 0 4px;
+  }
+  .nb-inline mark {
+    background: linear-gradient(
+      180deg,
+      transparent 8%,
+      var(--color-highlight) 8%,
+      var(--color-highlight) 82%,
+      transparent 82%
+    );
+    color: inherit;
+    padding: 0 2px;
+  }
+  .nb-inline a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--color-marker);
+    text-underline-offset: 2px;
+  }
 }
