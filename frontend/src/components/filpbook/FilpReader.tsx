@@ -66,7 +66,7 @@ export function FilpReader({
     box && heights ? paginate(post.blocks, heights, box.h - SAFETY_PX) : null;
 
   return (
-    <div ref={containerRef} className="flex w-full flex-col items-center">
+    <div ref={containerRef} className="flex w-full flex-col items-center bg-[#6b6f63]">
       {pageW > 0 && (
         <div
           aria-hidden
