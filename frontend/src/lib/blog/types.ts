@@ -1,12 +1,3 @@
-export type User = {
-  id: string;
-  username: string;
-  handle: string;
-  email: string;
-  avatarUrl?: string;
-  postCount: number;
-};
-
 // The contract. Whatever the FastAPI backend returns later must match these types.
 // Frontend is built entirely against this shape using mock data first.
 
@@ -86,14 +77,12 @@ export interface Post {
   updatedAt?: string;
   /** Flags the book/flip treatment. Non-book posts render as normal scroll. */
   isBook: true;
+  /** Optional tags, stored without the leading '#'. */
+  tags?: string[];
   /** Ordered content. Document order IS reading order. */
   blocks: Block[];
   /** Number of authored sections. Derived from the max `section` + 1;
    *  stored for convenience. NOTE: this is NOT the page count — page count
    *  only exists once a viewport is known and is always computed at render. */
   sectionCount: number;
-  /** Optional tags, stored without the leading '#'. */
-  tags?: string[];
 }
-
-export type ListStatus = 'idle' | 'loading' | 'success' | 'empty' | 'error';

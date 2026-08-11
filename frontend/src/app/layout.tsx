@@ -1,22 +1,30 @@
-import type { Metadata } from "next";
-import { Public_Sans, Source_Serif_4, IBM_Plex_Mono } from "next/font/google";
-import Shell from "@/components/shell/Shell";
-import ToastHost from "@/components/ui/Toast";
+import type { ReactNode } from "react";
+import { Caveat, Kalam, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const ui = Public_Sans({ subsets: ["latin"], variable: "--font-ui-loaded", weight: ["400","500","600","700"] });
-const serif = Source_Serif_4({ subsets: ["latin"], variable: "--font-serif-loaded", weight: ["400","500","600","700"], style: ["normal","italic"] });
-const mono = IBM_Plex_Mono({ subsets: ["latin"], variable: "--font-mono-loaded", weight: ["400","500"] });
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-caveat",
+});
+const kalam = Kalam({
+  subsets: ["latin"],
+  weight: ["300", "400", "700"],
+  variable: "--font-kalam",
+});
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains",
+});
 
-export const metadata: Metadata = { title: "Learn Stack", description: "A content-first publishing platform." };
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${ui.variable} ${serif.variable} ${mono.variable}`}>
-      <body>
-        <Shell>{children}</Shell>
-        <ToastHost />
-      </body>
+    <html
+      lang="en"
+      className={`${caveat.variable} ${kalam.variable} ${jetbrains.variable}`}
+    >
+      <body>{children}</body>
     </html>
   );
 }
