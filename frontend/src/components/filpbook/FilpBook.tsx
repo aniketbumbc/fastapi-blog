@@ -99,6 +99,10 @@ export function FilpBook({
           startPage={startPage}
           width={pageW}
           height={pageH}
+          minWidth={pageW}
+          maxWidth={pageW}
+          minHeight={pageH}
+          maxHeight={pageH}
           size="fixed"
           usePortrait={portrait}
           showCover={false}
@@ -107,6 +111,12 @@ export function FilpBook({
           flippingTime={reducedMotion ? 0 : 700}
           mobileScrollSupport
           useMouseEvents
+          startZIndex={0}
+          autoSize
+          clickEventForward
+          swipeDistance={30}
+          showPageCorners
+          disableFlipByClick={false}
           onFlip={handleFlip}
           className="book-flip"
           style={{}}

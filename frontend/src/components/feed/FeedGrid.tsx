@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import type { Post, ListStatus } from "@/lib/types";
+import type { LegacyPost as Post, ListStatus } from "@/lib/types";
 import FeedCard from "./FeedCard";
 import FeedSkeleton from "./FeedSkeleton";
 import Button from "@/components/ui/Button";

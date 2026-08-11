@@ -1,5 +1,5 @@
 import { marked, type Tokens } from 'marked';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 import type { Block } from './types';
 
 // Inline HTML whitelist — matches what BlockRenderer/nb-inline can style.

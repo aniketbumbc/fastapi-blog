@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Post, ListStatus } from '@/lib/types';
+import type { LegacyPost as Post, ListStatus } from '@/lib/types';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000/api';
 

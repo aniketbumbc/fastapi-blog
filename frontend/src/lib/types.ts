@@ -73,6 +73,21 @@ export type Block =
 
 // ---- Post ----------------------------------------------------------------
 
+/** Old flat blog-API shape. Still backs the real FastAPI-integrated flow
+ *  (store/blog.ts, PostEditor, feed, post detail, mock.ts) — not migrated
+ *  to the block-based notebook `Post` below. */
+export type LegacyPost = {
+  id: string;
+  title: string;
+  topic: string;
+  excerpt: string;
+  content: string;
+  coverUrl?: string;
+  author: Pick<User, 'id' | 'username' | 'handle' | 'avatarUrl'>;
+  createdAt: string; // ISO
+  readTime: number; // minutes
+};
+
 export interface Post {
   id: string;
   slug: string;

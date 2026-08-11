@@ -2,7 +2,7 @@ import Link from "next/link";
 import Card from "@/components/ui/Card";
 import Tag from "@/components/ui/Tag";
 import Avatar from "@/components/ui/Avatar";
-import type { Post } from "@/lib/types";
+import type { LegacyPost as Post } from "@/lib/types";
 
 export default function FeedCard({ post }: { post: Post }) {
   return (

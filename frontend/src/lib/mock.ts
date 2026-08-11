@@ -1,4 +1,4 @@
-import type { Post, User } from '@/lib/types';
+import type { LegacyPost as Post, User } from '@/lib/types';
 
 export const mockUsers: User[] = [
   {
