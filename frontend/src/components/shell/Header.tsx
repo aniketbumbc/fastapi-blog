@@ -2,23 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/store/auth";
 import { useToast } from "@/store/toast";
 import Avatar from "@/components/ui/Avatar";
 import { AccountModalTrigger } from "@/components/accountmodal/accountmodal";
 
-const NAV_LINKS = [
-  { label: "Latest", href: "/blog" },
-  { label: "System Design", href: "/blog" },
-  { label: "Notebooks", href: "/blog" },
-];
-
 export default function Header() {
   const { currentUser, logout } = useAuth();
   const push = useToast((s) => s.push);
   const router = useRouter();
-  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -26,19 +19,8 @@ export default function Header() {
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <div className="flex items-center gap-8">
           <Link href="/" className="font-display text-2xl font-bold text-ink">
-            Marginalia
+            The Dev Journal
           </Link>
-          <div className="hidden gap-6 font-body text-[15px] text-ink-soft md:flex">
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                className={pathname === l.href ? "text-ink" : "hover:text-ink"}
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
         </div>
 
         <div className="flex items-center gap-3">

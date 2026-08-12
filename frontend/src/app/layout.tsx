@@ -4,6 +4,16 @@ import Header from "@/components/shell/Header";
 import Footer from "@/components/shell/Footer";
 import AuthHydrator from "@/components/shell/AuthHydrator";
 import "./globals.css";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    default: "The Dev Journal",
+    template: "%s · The Dev Journal",
+  },
+  description:
+    "The Dev Journal is a notebook-styled blog for engineers who work things out on paper before they publish.",
+};
 
 const caveat = Caveat({
   subsets: ["latin"],

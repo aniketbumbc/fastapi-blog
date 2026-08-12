@@ -7,6 +7,7 @@ import type { Post } from "@/lib/blog/types";
 import { fetchBlogBySlug } from "@/lib/blog/api";
 import { useAuth } from "@/store/auth";
 import BlogEditor from "@/components/blog/BlogEditor";
+import Loader from "@/components/ui/Loader";
 
 type State =
   | { status: "loading" }
@@ -42,7 +43,7 @@ export default function EditBlogPage() {
   if (state.status === "loading") {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#6b6f63]">
-        <p className="font-body text-white/80">Loading…</p>
+        <Loader />
       </main>
     );
   }

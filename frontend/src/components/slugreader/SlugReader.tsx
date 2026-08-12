@@ -9,6 +9,7 @@ import { BookReader } from "@/components/filpbook/BookReader";
 import { useAuth } from "@/store/auth";
 import { useToast } from "@/store/toast";
 import Modal from "@/components/ui/Modal";
+import Loader from "@/components/ui/Loader";
 
 type State = { status: "loading" } | { status: "found"; post: Post } | { status: "missing" };
 
@@ -37,7 +38,7 @@ export function SlugReader({ slug }: { slug: string }) {
   }, [slug]);
 
   if (state.status === "loading") {
-    return <p className="font-body text-white/80">Loading…</p>;
+    return <Loader />;
   }
 
   if (state.status === "missing") {
@@ -45,7 +46,7 @@ export function SlugReader({ slug }: { slug: string }) {
       <div className="text-center font-body text-white">
         <p className="text-2xl">No post found for “{slug}”.</p>
         <div className="mt-4 flex justify-center gap-4 text-sm underline">
-          <Link href="/blog">All posts</Link>
+          <Link href="/">All posts</Link>
           <Link href="/blog/new">Write one</Link>
         </div>
       </div>

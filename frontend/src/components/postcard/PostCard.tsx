@@ -49,7 +49,9 @@ export function PostCard({ post, onDelete }: PostCardProps) {
             ) : (
               <span />
             )}
-            <span className="font-body text-[13px] text-ink-soft">{post.readingTime}</span>
+            <span className="font-body text-[13px] text-ink-soft">
+              {new Date(post.publishedAt).toLocaleDateString()} · {post.readingTime}
+            </span>
           </div>
         </div>
       </Link>

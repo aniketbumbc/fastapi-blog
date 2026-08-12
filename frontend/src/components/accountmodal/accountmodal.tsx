@@ -201,7 +201,7 @@ function AccountModal({
           </form>
 
           <p className="mt-4 font-body text-sm text-ink-soft">
-            {isLogin ? "New to Marginalia?" : "Already have an account?"}{" "}
+            {isLogin ? "New to The Dev Journal?" : "Already have an account?"}{" "}
             <button
               type="button"
               onClick={() => switchMode(isLogin ? "signup" : "login")}

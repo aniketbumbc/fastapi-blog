@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Post } from "@/lib/blog/types";
 import { listPosts, deletePost } from "@/lib/postStore";
+import Loader from "@/components/ui/Loader";
 
 export default function BlogIndexPage() {
   const [posts, setPosts] = useState<Post[] | null>(null);
@@ -30,7 +31,9 @@ export default function BlogIndexPage() {
         </div>
 
         {posts === null ? (
-          <p className="text-neutral-500">Loading…</p>
+          <div className="flex justify-center py-8">
+            <Loader />
+          </div>
         ) : posts.length === 0 ? (
           <p className="text-neutral-500">
             Nothing published yet.{" "}

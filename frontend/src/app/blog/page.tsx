@@ -6,6 +6,7 @@ import type { Post } from "@/lib/blog/types";
 import { listPosts, deletePost } from "@/lib/postStore";
 import { previewText, readingTime } from "@/lib/postSummary";
 import { PostCard } from "@/components/postcard/PostCard";
+import Loader from "@/components/ui/Loader";
 
 export default function BlogIndexPage() {
   const [posts, setPosts] = useState<Post[] | null>(null);
@@ -35,7 +36,9 @@ export default function BlogIndexPage() {
         </div>
 
         {posts === null ? (
-          <p className="font-body text-ink-soft">Loading…</p>
+          <div className="flex justify-center py-8">
+            <Loader />
+          </div>
         ) : posts.length === 0 ? (
           <p className="font-body text-ink-soft">
             Nothing published yet.{" "}
