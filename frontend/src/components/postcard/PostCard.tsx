@@ -18,7 +18,7 @@ export function PostCard({ post, onDelete }: PostCardProps) {
       />
       <Link href={`/blog/${post.slug}`} className="notebook-lined block">
         <span aria-hidden className="absolute inset-y-0 left-7 w-px bg-margin-line/70" />
-        <div className="relative py-6 pl-11 pr-6">
+        <div className="relative py-6 pl-11 pr-6 bg-highlight p-4 shadow-[0_8px_18px_-6px_rgba(0,0,0,0.4)]">
           {post.kicker && (
             <p className="font-body text-[13px] italic text-ink-soft">{post.kicker}</p>
           )}

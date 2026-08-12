@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Post } from "@/lib/blog/types";
 import { loadPost } from "@/lib/postStore";
+import { fetchBlogBySlug } from "@/lib/blog/api";
 import { BookReader } from "@/components/filpbook/BookReader";
 
 type State = { status: "loading" } | { status: "found"; post: Post } | { status: "missing" };
@@ -12,8 +13,22 @@ export function SlugReader({ slug }: { slug: string }) {
   const [state, setState] = useState<State>({ status: "loading" });
 
   useEffect(() => {
-    const post = loadPost(slug);
-    setState(post ? { status: "found", post } : { status: "missing" });
+    let cancelled = false;
+
+    // Local drafts (from /blog/new's "Publish → view") take priority since
+    // they never reach the backend.
+    Promise.resolve(loadPost(slug))
+      .then((draft) => draft ?? fetchBlogBySlug(slug))
+      .then((post) => {
+        if (!cancelled) setState(post ? { status: "found", post } : { status: "missing" });
+      })
+      .catch(() => {
+        if (!cancelled) setState({ status: "missing" });
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [slug]);
 
   if (state.status === "loading") {

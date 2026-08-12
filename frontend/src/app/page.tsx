@@ -2,41 +2,9 @@ import Link from "next/link";
 import { RecentEntries } from "@/components/recententries/recententries";
 import { AccountModalTrigger } from "@/components/accountmodal/accountmodal";
 
-const GREEN = "bg-[#5fa32b] hover:bg-[#54922568]";
-
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#f3efe6]">
-      {/* ---- Nav ---- */}
-      <header className="sticky top-0 z-30 border-b border-neutral-300/70 bg-[#faf7ee]/95 backdrop-blur">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="font-display text-2xl font-bold text-ink">
-              Marginalia
-            </Link>
-            <div className="hidden gap-6 font-body text-[15px] text-ink-soft md:flex">
-              <Link href="/blog" className="hover:text-ink">Latest</Link>
-              <Link href="/blog" className="hover:text-ink">System Design</Link>
-              <Link href="/blog" className="hover:text-ink">Notebooks</Link>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <AccountModalTrigger
-              mode="login"
-              className="rounded-md border border-neutral-400 px-4 py-2 font-body text-sm text-ink hover:bg-neutral-100"
-            >
-              Log in
-            </AccountModalTrigger>
-            <Link
-              href="/blog/new"
-              className="rounded-md bg-[#5fa32b] px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
-            >
-              Start writing
-            </Link>
-          </div>
-        </nav>
-      </header>
-
+    <div className="bg-[#f3efe6]">
       {/* ---- Hero ---- */}
       <section className="notebook-lined relative border-b border-neutral-300/70">
         <span aria-hidden className="absolute inset-y-0 left-[90px] w-px bg-margin-line/70" />
@@ -86,18 +54,6 @@ export default function HomePage() {
         </p>
         <RecentEntries />
       </section>
-
-      {/* ---- Footer ---- */}
-      <footer className="bg-[#333a2c] text-[#d7dccb]">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-6 font-body text-sm sm:flex-row sm:items-center sm:justify-between">
-          <span>Marginalia — written by hand, served over HTTP.</span>
-          <div className="flex gap-5">
-            <Link href="/blog" className="hover:text-white">RSS</Link>
-            <Link href="/blog" className="hover:text-white">Archive</Link>
-            <Link href="/blog" className="hover:text-white">Colophon</Link>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

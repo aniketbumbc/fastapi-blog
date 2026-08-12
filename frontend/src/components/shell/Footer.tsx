@@ -1,23 +1,25 @@
 import Link from "next/link";
 
 const links = [
+  { label: "All posts", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "API docs", href: "https://api.aniketdev.blog/docs", external: true },
 ];
 
 export default function Footer() {
   return (
-    <footer className="border-t border-divider bg-surface">
-      <div className="max-w-[1120px] mx-auto px-5 py-6 flex flex-wrap items-center justify-between gap-3">
-        <span className="text-sm text-muted">
-          <span className="font-serif font-bold text-ink">Learn Stack</span> · © {new Date().getFullYear()}
+    <footer className="bg-[#333a2c] text-[#d7dccb]">
+      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-6 font-body text-sm sm:flex-row sm:items-center sm:justify-between">
+        <span>
+          <span className="font-display text-base font-bold text-white">Marginalia</span>
+          {" "}— written by hand, served over HTTP. © {new Date().getFullYear()}
         </span>
-        <nav className="flex gap-4 text-sm text-muted">
+        <nav className="flex gap-5">
           {links.map((l) => (
             <Link
               key={l.label}
               href={l.href}
-              className="hover:text-text"
+              className="hover:text-white"
               {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             >
               {l.label}
