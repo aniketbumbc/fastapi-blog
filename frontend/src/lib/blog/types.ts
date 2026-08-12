@@ -86,3 +86,16 @@ export interface Post {
    *  only exists once a viewport is known and is always computed at render. */
   sectionCount: number;
 }
+
+/** Lightweight shape for the homepage feed and /blog index — no blocks.
+ *  Mirrors the backend's BlogSummary (GET /api/blogs/). */
+export interface BlogSummary {
+  slug: string;
+  title: string;
+  subtitle?: string;
+  kicker?: string;
+  tags?: string[];
+  publishedAt: string;
+  preview: string;
+  readingTime: string;
+}

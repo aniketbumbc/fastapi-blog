@@ -1,15 +1,14 @@
 import Link from "next/link";
-import type { Post } from "@/lib/blog/types";
-import { previewText, readingTime, primaryTag } from "@/lib/postSummary";
+import type { BlogSummary } from "@/lib/blog/types";
 
 interface PostCardProps {
-  post: Post;
+  post: BlogSummary;
   /** When provided, shows a delete control (used by the manage/index view). */
   onDelete?: (slug: string) => void;
 }
 
 export function PostCard({ post, onDelete }: PostCardProps) {
-  const tag = primaryTag(post);
+  const tag = post.tags?.[0] ?? null;
   return (
     <div className="group relative overflow-hidden rounded-xl border border-neutral-300/70 shadow-[0_10px_24px_-12px_rgba(0,0,0,0.35)] transition-shadow hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.45)]">
       {/* tape strip */}
@@ -39,7 +38,7 @@ export function PostCard({ post, onDelete }: PostCardProps) {
           )}
 
           <p className="mt-2 line-clamp-3 font-body text-[15px] leading-snug text-ink">
-            {previewText(post)}
+            {post.preview}
           </p>
 
           <div className="mt-5 flex items-center justify-between">
@@ -50,7 +49,7 @@ export function PostCard({ post, onDelete }: PostCardProps) {
             ) : (
               <span />
             )}
-            <span className="font-body text-[13px] text-ink-soft">{readingTime(post)}</span>
+            <span className="font-body text-[13px] text-ink-soft">{post.readingTime}</span>
           </div>
         </div>
       </Link>

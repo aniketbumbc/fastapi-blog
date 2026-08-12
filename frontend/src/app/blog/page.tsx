@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Post } from "@/lib/blog/types";
 import { listPosts, deletePost } from "@/lib/postStore";
+import { previewText, readingTime } from "@/lib/postSummary";
 import { PostCard } from "@/components/postcard/PostCard";
 
 export default function BlogIndexPage() {
@@ -46,7 +47,20 @@ export default function BlogIndexPage() {
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {posts.map((p) => (
-              <PostCard key={p.slug} post={p} onDelete={remove} />
+              <PostCard
+                key={p.slug}
+                post={{
+                  slug: p.slug,
+                  title: p.title,
+                  subtitle: p.subtitle,
+                  kicker: p.kicker,
+                  tags: p.tags,
+                  publishedAt: p.publishedAt,
+                  preview: previewText(p),
+                  readingTime: readingTime(p),
+                }}
+                onDelete={remove}
+              />
             ))}
           </div>
         )}
