@@ -25,6 +25,13 @@
   --nb-grid: 22px; /* graph-paper square size */
 }
 
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
 /* ---- Notebook texture: the ~60% that Tailwind utilities can't express ---- */
 @layer components {
   .notebook-paper {
@@ -165,5 +172,15 @@
     text-decoration: underline;
     text-decoration-color: var(--color-marker);
     text-underline-offset: 2px;
+  }
+
+  /* Empty-state fill for avatars/thumbnails with no image yet. */
+  .placeholder-stripes {
+    background-color: var(--color-grid);
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent 0 10px,
+      var(--color-grid-strong) 10px 20px
+    );
   }
 }

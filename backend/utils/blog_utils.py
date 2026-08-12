@@ -51,9 +51,11 @@ def to_response(blog) -> BlogResponse:
         subtitle=blog.subtitle,
         kicker=blog.kicker,
         author=blog.author_name,
+        userId=str(blog.user_id) if blog.user_id is not None else None,
         tags=blog.tags,
         publishedAt=blog.date_posted.isoformat(),
         isBook=True,
         sectionCount=blog.section_count,
+        markdown=blog.markdown,
         blocks=blog.blocks or [],
     )

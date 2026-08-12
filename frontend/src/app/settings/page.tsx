@@ -41,8 +41,8 @@ export default function SettingsPage() {
   if (!currentUser) {
     return (
       <div className="max-w-[420px] mx-auto py-20 text-center">
-        <p className="text-lg font-semibold text-ink">You need to be signed in to view settings.</p>
-        <Link href="/login" className="text-accent text-sm mt-2 inline-block">Log in</Link>
+        <p className="font-display text-lg font-semibold text-ink">You need to be signed in to view settings.</p>
+        <Link href="/login" className="mt-2 inline-block font-body text-sm text-marker underline decoration-margin-line">Log in</Link>
       </div>
     );
   }
@@ -115,8 +115,8 @@ export default function SettingsPage() {
   return (
     <div className="max-w-[720px] mx-auto py-4 space-y-6">
       <Card className="p-7">
-        <h2 className="font-serif text-xl font-bold text-ink">Profile</h2>
-        <p className="text-sm text-muted mt-1">This information appears on your public profile.</p>
+        <h2 className="font-display text-2xl font-bold text-marker">Profile</h2>
+        <p className="mt-1 font-body text-sm text-ink-soft">This information appears on your public profile.</p>
 
         <div className="mt-5 grid grid-cols-1 sm:grid-cols-[220px_1fr] gap-6">
           <AvatarUploader
@@ -145,7 +145,7 @@ export default function SettingsPage() {
       </Card>
 
       <Card className="p-7">
-        <h2 className="font-serif text-xl font-bold text-ink">Change password</h2>
+        <h2 className="font-display text-2xl font-bold text-marker">Change password</h2>
 
         <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Input
@@ -165,13 +165,13 @@ export default function SettingsPage() {
         </div>
       </Card>
 
-      <Card className="p-7 border-danger-border">
-        <h2 className="font-serif text-xl font-bold text-danger">Danger zone</h2>
+      <Card className="border-marker/30 p-7">
+        <h2 className="font-display text-2xl font-bold text-marker">Danger zone</h2>
         <div className="mt-4 flex items-center justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold text-text">Delete account</p>
-            <p className="text-sm text-muted">Permanently removes your account and all your posts.</p>
-            {deleteError && <p className="mt-1 text-xs text-danger">{deleteError}</p>}
+            <p className="font-body text-sm font-semibold text-ink">Delete account</p>
+            <p className="font-body text-sm text-ink-soft">Permanently removes your account and all your posts.</p>
+            {deleteError && <p className="mt-1 font-body text-xs text-marker">{deleteError}</p>}
           </div>
           <Button variant="danger" onClick={() => setConfirmDelete(true)}>Delete account</Button>
         </div>

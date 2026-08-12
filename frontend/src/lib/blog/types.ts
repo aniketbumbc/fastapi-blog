@@ -72,6 +72,9 @@ export interface Post {
   /** Small margin label at the top of the page, e.g. "System Design · Entry 07". */
   kicker?: string;
   author: string;
+  /** Id of the user who owns this post — lets the frontend show edit/delete
+   *  controls only to the owner. Absent on posts created before this existed. */
+  userId?: string;
   /** ISO 8601. */
   publishedAt: string;
   updatedAt?: string;
@@ -79,6 +82,9 @@ export interface Post {
   isBook: true;
   /** Optional tags, stored without the leading '#'. */
   tags?: string[];
+  /** Raw markdown source — the editable form of `blocks`. Always present on
+   *  posts fetched from the backend; absent on locally-built draft posts. */
+  markdown?: string;
   /** Ordered content. Document order IS reading order. */
   blocks: Block[];
   /** Number of authored sections. Derived from the max `section` + 1;

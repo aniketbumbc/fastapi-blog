@@ -2,23 +2,28 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { Post } from "@/lib/blog/types";
-import { loadPost } from "@/lib/postStore";
-import { fetchBlogBySlug } from "@/lib/blog/api";
+import { fetchBlogBySlug, deleteBlog } from "@/lib/blog/api";
 import { BookReader } from "@/components/filpbook/BookReader";
+import { useAuth } from "@/store/auth";
+import { useToast } from "@/store/toast";
+import Modal from "@/components/ui/Modal";
 
 type State = { status: "loading" } | { status: "found"; post: Post } | { status: "missing" };
 
 export function SlugReader({ slug }: { slug: string }) {
   const [state, setState] = useState<State>({ status: "loading" });
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const { currentUser, isOwner, token } = useAuth();
+  const push = useToast((s) => s.push);
+  const router = useRouter();
 
   useEffect(() => {
     let cancelled = false;
 
-    // Local drafts (from /blog/new's "Publish → view") take priority since
-    // they never reach the backend.
-    Promise.resolve(loadPost(slug))
-      .then((draft) => draft ?? fetchBlogBySlug(slug))
+    fetchBlogBySlug(slug)
       .then((post) => {
         if (!cancelled) setState(post ? { status: "found", post } : { status: "missing" });
       })
@@ -47,5 +52,53 @@ export function SlugReader({ slug }: { slug: string }) {
     );
   }
 
-  return <BookReader post={state.post} startNumber={24} />;
+  const owner = !!currentUser && isOwner(state.post.userId ?? "");
+
+  const confirmDeletePost = async () => {
+    setDeleting(true);
+    const result = await deleteBlog(slug, token);
+    setDeleting(false);
+    if (!result.ok) {
+      push(result.error, "error");
+      return;
+    }
+    setConfirmDelete(false);
+    push("Post deleted");
+    router.push("/blog");
+  };
+
+  return (
+    <>
+      {owner && (
+        <div className="fixed right-6 top-20 z-40 flex gap-2">
+          <Link
+            href={`/blog/${slug}/edit`}
+            className="rounded-md bg-[#5fa32b] px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
+          >
+            Edit
+          </Link>
+          <button
+            type="button"
+            onClick={() => setConfirmDelete(true)}
+            className="rounded-md bg-marker px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
+          >
+            Delete
+          </button>
+        </div>
+      )}
+
+      <BookReader post={state.post} startNumber={24} />
+
+      <Modal
+        open={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        icon="🗑"
+        title="Delete this post?"
+        description="This permanently removes the post. This can't be undone."
+        confirmLabel={deleting ? "Deleting…" : "Delete post"}
+        confirmDisabled={deleting}
+        onConfirm={confirmDeletePost}
+      />
+    </>
+  );
 }

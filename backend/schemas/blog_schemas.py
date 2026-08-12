@@ -62,10 +62,12 @@ class BlogResponse(BaseModel):
     subtitle: str | None = None
     kicker: str | None = None
     author: str
+    userId: str | None = None
     tags: list[str] | None = None
     publishedAt: str
     isBook: Literal[True] = True
     sectionCount: int
+    markdown: str
     blocks: list[Block]
 
 

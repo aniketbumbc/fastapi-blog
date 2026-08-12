@@ -3,10 +3,14 @@ import { cn } from "@/lib/cn";
 export default function Avatar({ src, size = 38, alt = "", ring }: { src?: string; size?: number; alt?: string; ring?: boolean }) {
   return (
     <span
-      className={cn("inline-block rounded-full overflow-hidden shrink-0", !src && "placeholder-stripes", ring && "ring-2 ring-primary ring-offset-2 ring-offset-page")}
+      className={cn(
+        "inline-block shrink-0 overflow-hidden rounded-full",
+        !src && "placeholder-stripes",
+        ring && "ring-2 ring-[#5fa32b] ring-offset-2"
+      )}
       style={{ width: size, height: size }}
     >
-      {src && <img src={src} alt={alt} width={size} height={size} className="object-cover w-full h-full" />}
+      {src && <img src={src} alt={alt} width={size} height={size} className="h-full w-full object-cover" />}
     </span>
   );
 }

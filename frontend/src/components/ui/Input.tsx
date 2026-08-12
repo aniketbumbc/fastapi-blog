@@ -15,22 +15,22 @@ export default function Input({ label, error, valid, hint, labelRight, className
     <div className="flex flex-col gap-1.5">
       {label && (
         <div className="flex items-center justify-between">
-          <label htmlFor={inputId} className="text-[13px] font-medium text-text">{label}</label>
+          <label htmlFor={inputId} className="font-body text-xs uppercase tracking-wide text-ink-soft">{label}</label>
           {labelRight}
         </div>
       )}
       <input
         id={inputId}
         className={cn(
-          "focus-ring h-11 px-3 rounded-[9px] bg-surface text-text text-sm border transition-colors placeholder:text-subtle",
-          error ? "border-danger" : valid ? "border-success" : "border-border-strong",
+          "h-11 rounded-md border bg-white px-3 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-soft/50 focus:border-marker",
+          error ? "border-marker" : valid ? "border-emerald-600" : "border-grid-strong",
           className
         )}
         {...rest}
       />
-      {error ? <p className="text-xs text-danger">{error}</p>
-        : valid ? <p className="text-xs text-success">✓ Looks good</p>
-        : hint ? <p className="text-xs text-subtle">{hint}</p> : null}
+      {error ? <p className="font-body text-xs text-marker">{error}</p>
+        : valid ? <p className="font-body text-xs text-emerald-700">✓ Looks good</p>
+        : hint ? <p className="font-body text-xs text-ink-soft">{hint}</p> : null}
     </div>
   );
 }

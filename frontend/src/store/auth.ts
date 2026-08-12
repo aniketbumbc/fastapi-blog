@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import type { User } from '@/lib/types';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000/api';
@@ -39,11 +40,13 @@ type PasswordInput = { current_password: string; new_password: string };
 type AuthState = {
   currentUser: User | null;
   token: string | null;
+  hasHydrated: boolean;
   registerStatus: 'idle' | 'loading' | 'error';
   registerError: string | null;
   login: (u: User, token?: string) => void;
   logout: () => void;
   isOwner: (authorId: string) => boolean;
+  checkSession: () => Promise<void>;
   register: (input: RegisterInput) => Promise<boolean>;
   signIn: (username: string, password: string) => Promise<{ ok: true } | { ok: false; error: string }>;
   updateProfile: (input: ProfileInput) => Promise<{ ok: true } | { ok: false; error: string }>;
@@ -55,196 +58,237 @@ type AuthState = {
   removeAvatar: () => Promise<{ ok: true } | { ok: false; error: string }>;
 };
 
-export const useAuth = create<AuthState>((set, get) => ({
-  currentUser: null,
-  token: null,
-  registerStatus: 'idle',
-  registerError: null,
-  login: (u, token) => set({ currentUser: u, token: token ?? get().token }),
-  logout: () => set({ currentUser: null, token: null }),
-  isOwner: (authorId) => get().currentUser?.id === authorId,
+// sessionStorage is scoped per browser tab, so each tab can hold its own
+// signed-in user instead of sharing one session across every tab (localStorage).
+const sessionStorageAdapter = createJSONStorage<Pick<AuthState, 'currentUser' | 'token'>>(() =>
+  typeof window === 'undefined'
+    ? { getItem: () => null, setItem: () => {}, removeItem: () => {} }
+    : window.sessionStorage,
+);
 
-  register: async (input) => {
-    set({ registerStatus: 'loading', registerError: null });
-    try {
-      const res = await fetch(`${API_BASE}/users/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(input),
-      });
+export const useAuth = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      currentUser: null,
+      token: null,
+      hasHydrated: false,
+      registerStatus: 'idle',
+      registerError: null,
+      login: (u, token) => set({ currentUser: u, token: token ?? get().token }),
+      logout: () => set({ currentUser: null, token: null }),
+      isOwner: (authorId) => get().currentUser?.id === authorId,
 
-      if (!res.ok) {
-        const message = await apiErrorMessage(res, 'Registration failed');
-        set({ registerStatus: 'error', registerError: message });
-        return false;
-      }
-
-      const data: ApiUser = await res.json();
-      set({ currentUser: toUser(data), registerStatus: 'idle', registerError: null });
-      return true;
-    } catch {
-      set({ registerStatus: 'error', registerError: 'Registration failed. Please try again.' });
-      return false;
-    }
-  },
-
-  signIn: async (username, password) => {
-    try {
-      const form = new URLSearchParams();
-      form.append('username', username);
-      form.append('password', password);
-
-      const tokenRes = await fetch(`${API_BASE}/users/token`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: form,
-      });
-      if (!tokenRes.ok) {
-        const message = tokenRes.status === 401
-          ? 'Incorrect username or password.'
-          : await apiErrorMessage(tokenRes, 'Login failed');
-        return { ok: false, error: message };
-      }
-      const { access_token }: { access_token: string; token_type: string } = await tokenRes.json();
-
-      const meRes = await fetch(`${API_BASE}/users/me`, {
-        headers: { Authorization: `Bearer ${access_token}` },
-      });
-      if (!meRes.ok) return { ok: false, error: 'Login failed. Please try again.' };
-      const me: ApiUser = await meRes.json();
-
-      set({ currentUser: toUser(me), token: access_token });
-      return { ok: true };
-    } catch {
-      return { ok: false, error: 'Login failed. Please try again.' };
-    }
-  },
-
-  updateProfile: async (input) => {
-    const { currentUser, token } = get();
-    if (!currentUser) return { ok: false, error: 'Not signed in.' };
-    try {
-      const res = await fetch(`${API_BASE}/users/${currentUser.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(input),
-      });
-      if (!res.ok) return { ok: false, error: await apiErrorMessage(res, 'Could not update profile') };
-      const data: ApiUser = await res.json();
-      set({ currentUser: toUser(data) });
-      return { ok: true };
-    } catch {
-      return { ok: false, error: 'Could not update profile. Please try again.' };
-    }
-  },
-
-  changePassword: async (input) => {
-    const { token } = get();
-    try {
-      const res = await fetch(`${API_BASE}/users/me/password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(input),
-      });
-      if (!res.ok) return { ok: false, error: await apiErrorMessage(res, 'Could not update password') };
-      return { ok: true };
-    } catch {
-      return { ok: false, error: 'Could not update password. Please try again.' };
-    }
-  },
-
-  forgotPassword: async (email) => {
-    try {
-      const res = await fetch(`${API_BASE}/users/forgot_password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      if (!res.ok) return { ok: false, error: await apiErrorMessage(res, 'Could not send reset link') };
-      return { ok: true };
-    } catch {
-      return { ok: false, error: 'Could not send reset link. Please try again.' };
-    }
-  },
-
-  resetPassword: async (token, new_password) => {
-    try {
-      const res = await fetch(`${API_BASE}/users/rest_password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, new_password }),
-      });
-      if (!res.ok) return { ok: false, error: await apiErrorMessage(res, 'Could not reset password') };
-      return { ok: true };
-    } catch {
-      return { ok: false, error: 'Could not reset password. Please try again.' };
-    }
-  },
-
-  deleteAccount: async () => {
-    const { currentUser, token } = get();
-    if (!currentUser) return { ok: false, error: 'Not signed in.' };
-    try {
-      const res = await fetch(`${API_BASE}/users/${currentUser.id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) return { ok: false, error: await apiErrorMessage(res, 'Could not delete account') };
-      set({ currentUser: null, token: null });
-      return { ok: true };
-    } catch {
-      return { ok: false, error: 'Could not delete account. Please try again.' };
-    }
-  },
-
-  uploadAvatar: (file, onProgress) => {
-    const { currentUser, token } = get();
-    if (!currentUser) return Promise.resolve({ ok: false, error: 'Not signed in.' });
-
-    return new Promise((resolve) => {
-      const form = new FormData();
-      form.append('file', file);
-
-      const xhr = new XMLHttpRequest();
-      xhr.open('PATCH', `${API_BASE}/users/${currentUser.id}/picture`);
-      xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-
-      xhr.upload.onprogress = (e) => {
-        if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100));
-      };
-
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          const data: ApiUser = JSON.parse(xhr.responseText);
-          set({ currentUser: toUser(data) });
-          resolve({ ok: true });
-        } else {
-          const detail = (() => {
-            try { return JSON.parse(xhr.responseText)?.detail; } catch { return null; }
-          })();
-          resolve({ ok: false, error: typeof detail === 'string' ? detail : 'Could not upload image' });
+      // Revalidates the persisted token against the backend after the tab
+      // restores it from sessionStorage — clears the session if it's stale.
+      checkSession: async () => {
+        const { token } = get();
+        if (!token) return;
+        try {
+          const res = await fetch(`${API_BASE}/users/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!res.ok) {
+            set({ currentUser: null, token: null });
+            return;
+          }
+          const me: ApiUser = await res.json();
+          set({ currentUser: toUser(me) });
+        } catch {
+          // Network hiccup — keep the optimistic session from sessionStorage.
         }
-      };
-      xhr.onerror = () => resolve({ ok: false, error: 'Could not upload image. Please try again.' });
+      },
 
-      xhr.send(form);
-    });
-  },
+      register: async (input) => {
+        set({ registerStatus: 'loading', registerError: null });
+        try {
+          const res = await fetch(`${API_BASE}/users/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(input),
+          });
 
-  removeAvatar: async () => {
-    const { currentUser, token } = get();
-    if (!currentUser) return { ok: false, error: 'Not signed in.' };
-    try {
-      const res = await fetch(`${API_BASE}/users/${currentUser.id}/picture`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) return { ok: false, error: await apiErrorMessage(res, 'Could not remove image') };
-      const data: ApiUser = await res.json();
-      set({ currentUser: toUser(data) });
-      return { ok: true };
-    } catch {
-      return { ok: false, error: 'Could not remove image. Please try again.' };
-    }
-  },
-}));
+          if (!res.ok) {
+            const message = await apiErrorMessage(res, 'Registration failed');
+            set({ registerStatus: 'error', registerError: message });
+            return false;
+          }
+
+          const data: ApiUser = await res.json();
+          set({ currentUser: toUser(data), registerStatus: 'idle', registerError: null });
+          return true;
+        } catch {
+          set({ registerStatus: 'error', registerError: 'Registration failed. Please try again.' });
+          return false;
+        }
+      },
+
+      signIn: async (username, password) => {
+        try {
+          const form = new URLSearchParams();
+          form.append('username', username);
+          form.append('password', password);
+
+          const tokenRes = await fetch(`${API_BASE}/users/token`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: form,
+          });
+          if (!tokenRes.ok) {
+            const message = tokenRes.status === 401
+              ? 'Incorrect username or password.'
+              : await apiErrorMessage(tokenRes, 'Login failed');
+            return { ok: false, error: message };
+          }
+          const { access_token }: { access_token: string; token_type: string } = await tokenRes.json();
+
+          const meRes = await fetch(`${API_BASE}/users/me`, {
+            headers: { Authorization: `Bearer ${access_token}` },
+          });
+          if (!meRes.ok) return { ok: false, error: 'Login failed. Please try again.' };
+          const me: ApiUser = await meRes.json();
+
+          set({ currentUser: toUser(me), token: access_token });
+          return { ok: true };
+        } catch {
+          return { ok: false, error: 'Login failed. Please try again.' };
+        }
+      },
+
+      updateProfile: async (input) => {
+        const { currentUser, token } = get();
+        if (!currentUser) return { ok: false, error: 'Not signed in.' };
+        try {
+          const res = await fetch(`${API_BASE}/users/${currentUser.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            body: JSON.stringify(input),
+          });
+          if (!res.ok) return { ok: false, error: await apiErrorMessage(res, 'Could not update profile') };
+          const data: ApiUser = await res.json();
+          set({ currentUser: toUser(data) });
+          return { ok: true };
+        } catch {
+          return { ok: false, error: 'Could not update profile. Please try again.' };
+        }
+      },
+
+      changePassword: async (input) => {
+        const { token } = get();
+        try {
+          const res = await fetch(`${API_BASE}/users/me/password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            body: JSON.stringify(input),
+          });
+          if (!res.ok) return { ok: false, error: await apiErrorMessage(res, 'Could not update password') };
+          return { ok: true };
+        } catch {
+          return { ok: false, error: 'Could not update password. Please try again.' };
+        }
+      },
+
+      forgotPassword: async (email) => {
+        try {
+          const res = await fetch(`${API_BASE}/users/forgot_password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+          if (!res.ok) return { ok: false, error: await apiErrorMessage(res, 'Could not send reset link') };
+          return { ok: true };
+        } catch {
+          return { ok: false, error: 'Could not send reset link. Please try again.' };
+        }
+      },
+
+      resetPassword: async (token, new_password) => {
+        try {
+          const res = await fetch(`${API_BASE}/users/rest_password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, new_password }),
+          });
+          if (!res.ok) return { ok: false, error: await apiErrorMessage(res, 'Could not reset password') };
+          return { ok: true };
+        } catch {
+          return { ok: false, error: 'Could not reset password. Please try again.' };
+        }
+      },
+
+      deleteAccount: async () => {
+        const { currentUser, token } = get();
+        if (!currentUser) return { ok: false, error: 'Not signed in.' };
+        try {
+          const res = await fetch(`${API_BASE}/users/${currentUser.id}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!res.ok) return { ok: false, error: await apiErrorMessage(res, 'Could not delete account') };
+          set({ currentUser: null, token: null });
+          return { ok: true };
+        } catch {
+          return { ok: false, error: 'Could not delete account. Please try again.' };
+        }
+      },
+
+      uploadAvatar: (file, onProgress) => {
+        const { currentUser, token } = get();
+        if (!currentUser) return Promise.resolve({ ok: false, error: 'Not signed in.' });
+
+        return new Promise((resolve) => {
+          const form = new FormData();
+          form.append('file', file);
+
+          const xhr = new XMLHttpRequest();
+          xhr.open('PATCH', `${API_BASE}/users/${currentUser.id}/picture`);
+          xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+          xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100));
+          };
+
+          xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              const data: ApiUser = JSON.parse(xhr.responseText);
+              set({ currentUser: toUser(data) });
+              resolve({ ok: true });
+            } else {
+              const detail = (() => {
+                try { return JSON.parse(xhr.responseText)?.detail; } catch { return null; }
+              })();
+              resolve({ ok: false, error: typeof detail === 'string' ? detail : 'Could not upload image' });
+            }
+          };
+          xhr.onerror = () => resolve({ ok: false, error: 'Could not upload image. Please try again.' });
+
+          xhr.send(form);
+        });
+      },
+
+      removeAvatar: async () => {
+        const { currentUser, token } = get();
+        if (!currentUser) return { ok: false, error: 'Not signed in.' };
+        try {
+          const res = await fetch(`${API_BASE}/users/${currentUser.id}/picture`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!res.ok) return { ok: false, error: await apiErrorMessage(res, 'Could not remove image') };
+          const data: ApiUser = await res.json();
+          set({ currentUser: toUser(data) });
+          return { ok: true };
+        } catch {
+          return { ok: false, error: 'Could not remove image. Please try again.' };
+        }
+      },
+    }),
+    {
+      name: 'auth-storage',
+      storage: sessionStorageAdapter,
+      partialize: (state) => ({ currentUser: state.currentUser, token: state.token }),
+      onRehydrateStorage: () => (state) => {
+        if (state) state.hasHydrated = true;
+      },
+    },
+  ),
+);

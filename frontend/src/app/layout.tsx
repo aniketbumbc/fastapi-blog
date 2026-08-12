@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Caveat, Kalam, JetBrains_Mono } from "next/font/google";
 import Header from "@/components/shell/Header";
 import Footer from "@/components/shell/Footer";
+import AuthHydrator from "@/components/shell/AuthHydrator";
 import "./globals.css";
 
 const caveat = Caveat({
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${caveat.variable} ${kalam.variable} ${jetbrains.variable}`}
     >
       <body className="flex min-h-screen flex-col">
+        <AuthHydrator />
         <Header />
         <main className="flex-1 bg-[#f3efe6]">{children}</main>
         <Footer />

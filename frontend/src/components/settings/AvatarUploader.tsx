@@ -43,7 +43,7 @@ export default function AvatarUploader({ src, onUpload, onRemove }: Props) {
 
   return (
     <div>
-      <p className="text-[13px] font-medium text-text mb-1.5">Avatar</p>
+      <p className="mb-1.5 font-body text-xs uppercase tracking-wide text-ink-soft">Avatar</p>
       <div
         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
         onDragLeave={() => setDragOver(false)}
@@ -54,33 +54,33 @@ export default function AvatarUploader({ src, onUpload, onRemove }: Props) {
           if (file) handleFile(file);
         }}
         className={cn(
-          "rounded-2xl border-2 border-dashed p-5 flex flex-col items-center text-center gap-3 transition-colors",
-          dragOver ? "border-primary bg-tint" : "border-border-strong"
+          "flex flex-col items-center gap-3 rounded-md border-2 border-dashed p-5 text-center transition-colors",
+          dragOver ? "border-[#5fa32b] bg-highlight/30" : "border-neutral-300"
         )}
       >
         <Avatar src={src} size={96} />
 
         {uploading ? (
           <div className="w-full">
-            <div className="h-1.5 w-full rounded-full bg-divider overflow-hidden">
-              <div className="h-full bg-primary transition-[width]" style={{ width: `${progress}%` }} />
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-200">
+              <div className="h-full bg-[#5fa32b] transition-[width]" style={{ width: `${progress}%` }} />
             </div>
-            <p className="mt-1.5 text-xs text-subtle font-mono">Uploading… {progress}% · {fileName}</p>
+            <p className="mt-1.5 font-mono text-xs text-ink-soft">Uploading… {progress}% · {fileName}</p>
           </div>
         ) : (
-          <p className="text-sm text-muted">Drag an image here, or</p>
+          <p className="font-body text-sm text-ink-soft">Drag an image here, or</p>
         )}
 
         <div className="flex gap-2">
           <Button variant="secondary" onClick={() => inputRef.current?.click()} disabled={uploading || removing}>Choose file</Button>
           {src && (
-            <Button variant="ghost" className="text-danger" onClick={remove} disabled={uploading || removing}>
+            <Button variant="ghost" className="text-marker" onClick={remove} disabled={uploading || removing}>
               {removing ? "Removing…" : "Remove"}
             </Button>
           )}
         </div>
-        <p className="text-xs text-subtle">JPG or PNG · max 5 MB · cropped to square</p>
-        {error && <p className="text-xs text-danger">{error}</p>}
+        <p className="font-body text-xs text-ink-soft">JPG or PNG · max 5 MB · cropped to square</p>
+        {error && <p className="font-body text-xs text-marker">{error}</p>}
 
         <input
           ref={inputRef}
