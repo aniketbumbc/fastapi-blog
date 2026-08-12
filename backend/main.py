@@ -8,10 +8,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from database import Base, engine, get_db
-from routers import users, posts
+from routers import users, posts, blogs
 import models  # noqa: F401 - needed for Base.metadata.create_all to detect models
 from database import init_db,check_db_connection
 from fastapi.middleware.cors import CORSMiddleware
+
 
 
 
@@ -46,6 +47,7 @@ app.add_middleware(
 # Routers
 app.include_router(users.router)
 app.include_router(posts.router)
+app.include_router(blogs.router)
 
 
 #Registers the function as HTTP middleware on your FastAPI app. 
