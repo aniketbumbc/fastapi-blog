@@ -37,7 +37,7 @@ export default function HomePage() {
             </div>
 
             {/* sticky note */}
-            <div className="pointer-events-none absolute right-0 top-0 hidden w-64 rotate-2 bg-highlight p-4 shadow-[0_8px_18px_-6px_rgba(0,0,0,0.4)] lg:block">
+            <div className="pointer-events-none absolute right-0 top-25 hidden w-64 rotate-2 bg-highlight p-4 shadow-[0_8px_18px_-6px_rgba(0,0,0,0.4)] lg:block">
               <p className="font-display text-xl font-bold text-marker">New</p>
               <p className="mt-1 font-body text-[15px] leading-snug text-ink">
                 Entry 07 — URL shortener, start to finish.
