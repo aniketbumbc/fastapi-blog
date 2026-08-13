@@ -13,7 +13,7 @@ export function RecentEntries() {
   useEffect(() => {
     if (fetched.current) return;
     fetched.current = true;
-    fetchBlogSummaries(3)
+    fetchBlogSummaries(100)
       .then(setFeed)
       .catch(() => setFeed([]));
   }, []);

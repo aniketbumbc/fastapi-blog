@@ -10,15 +10,10 @@ interface PostCardProps {
 export function PostCard({ post, onDelete }: PostCardProps) {
   const tag = post.tags?.[0] ?? null;
   return (
-    <div className="group relative overflow-hidden rounded-xl border border-neutral-300/70 shadow-[0_10px_24px_-12px_rgba(0,0,0,0.35)] transition-shadow hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.45)]">
-      {/* tape strip */}
-      <span
-        aria-hidden
-        className="absolute left-1/2 top-0 z-10 h-5 w-24 -translate-x-1/2 rotate-[-1.5deg] bg-white/45 shadow-sm"
-      />
-      <Link href={`/blog/${post.slug}`} className="notebook-lined block">
+    <div className="group relative h-full overflow-hidden rounded-xl border border-neutral-300/70 bg-highlight shadow-[0_10px_24px_-12px_rgba(0,0,0,0.35)] transition-shadow hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.45)]">
+      <Link href={`/blog/${post.slug}`} className="block h-full bg-highlight">
         <span aria-hidden className="absolute inset-y-0 left-7 w-px bg-margin-line/70" />
-        <div className="relative py-6 pl-11 pr-6 bg-highlight p-4 shadow-[0_8px_18px_-6px_rgba(0,0,0,0.4)]">
+        <div className="relative h-full py-6 pl-11 pr-6 bg-highlight shadow-[0_8px_18px_-6px_rgba(0,0,0,0.4)]">
           {post.kicker && (
             <p className="font-body text-[13px] italic text-ink-soft">{post.kicker}</p>
           )}
