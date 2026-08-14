@@ -28,12 +28,12 @@ export default function HomePage() {
               >
                 Create an account
               </AccountModalTrigger>
-              <Link
+              {/* <Link
                 href="/blog"
                 className="rounded-md border border-neutral-400 bg-[#faf7ee] px-5 py-3 font-body text-ink hover:bg-neutral-100"
               >
                 Read the Latest
-              </Link>
+              </Link> */}
             </div>
 
             {/* sticky note */}
