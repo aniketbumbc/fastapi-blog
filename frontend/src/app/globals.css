@@ -186,25 +186,25 @@
 
   /* Notebook page-flip loader (<Loader />): ruled pages + turning-leaf animation. */
   .nb-loader-page {
-    background-color: #fffdf5;
-    border: 1.5px solid #d9d2bc;
+    background-color: var(--color-paper);
+    border: 1.5px solid var(--color-ring);
     background-image: repeating-linear-gradient(
       to bottom,
       transparent 0,
       transparent 15px,
-      #cfe0ef 15px,
-      #cfe0ef 16px
+      var(--color-grid-strong) 15px,
+      var(--color-grid-strong) 16px
     );
     background-position: 0 18px;
   }
   .nb-loader-page--left {
-    background-color: #f6f2e6;
+    background-color: var(--color-grid);
     border-right: none;
     border-radius: 6px 0 0 6px;
     box-shadow: inset -8px 0 14px -10px rgba(0, 0, 0, 0.35);
   }
   .nb-loader-page--right {
-    background-color: #f6f2e6;
+    background-color: var(--color-grid);
     border-left: none;
     border-radius: 0 6px 6px 0;
     box-shadow: inset 8px 0 14px -10px rgba(0, 0, 0, 0.35);
