@@ -1,13 +1,13 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from auth import CurrentUser
 
 from database import get_db
 from models.blog_model import Blog
-from schemas.blog_schemas import BlogResponse, BlogSummary, BlogCreate, BlogUpdate
+from schemas.blog_schemas import BlogResponse, BlogSummary, BlogStats, BlogCreate, BlogUpdate
 from utils.blog_utils import to_response, to_summary
 from utils.blog_compiler import compile_markdown
 
@@ -29,6 +29,16 @@ async def list_blogs(
     )
     blogs = result.scalars().all()
     return [to_summary(b) for b in blogs]
+
+
+# GET /api/blogs/stats — total post count + year of the earliest post, for the homepage hero
+@router.get("/stats", response_model=BlogStats, status_code=status.HTTP_200_OK)
+async def get_blog_stats(db: Annotated[AsyncSession, Depends(get_db)]):
+    result = await db.execute(
+        select(func.count(Blog.id), func.min(Blog.date_posted))
+    )
+    total, earliest = result.one()
+    return BlogStats(total=total, since=earliest.year if earliest else None)
 
 
 # GET /api/blogs/{slug} — the full post for the reader route

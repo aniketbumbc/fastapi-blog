@@ -84,6 +84,13 @@ class BlogSummary(BaseModel):
     readingTime: str
 
 
+class BlogStats(BaseModel):
+    """Aggregate counts for the homepage hero."""
+
+    total: int
+    since: int | None = None
+
+
 class BlogCreate(BaseModel):
     """Create payload: raw markdown in, compiled to blocks server-side."""
 

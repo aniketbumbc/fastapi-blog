@@ -1,8 +1,19 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import type { BlogStats } from "@/lib/blog/types";
+import { fetchBlogStats } from "@/lib/blog/api";
 import { RecentEntries } from "@/components/recententries/recententries";
 import { AccountModalTrigger } from "@/components/accountmodal/accountmodal";
 
 export default function HomePage() {
+  const [stats, setStats] = useState<BlogStats | null>(null);
+
+  useEffect(() => {
+    fetchBlogStats().then(setStats).catch(() => setStats(null));
+  }, []);
+
   return (
     <div className="bg-[#f3efe6]">
       {/* ---- Hero ---- */}
@@ -11,7 +22,9 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-6 py-16 pl-[120px]">
           <div className="relative">
             <p className="font-body text-[17px] italic text-ink-soft">
-              Since 2021 · 148 entries
+              {stats
+                ? `Since ${stats.since ?? "—"} · ${stats.total} ${stats.total === 1 ? "entry" : "entries"}`
+                : " "}
             </p>
             <h1 className="mt-2 max-w-4xl font-display text-5xl font-bold leading-[0.95] text-marker md:text-7xl">
               Think on paper. Publish on the web.

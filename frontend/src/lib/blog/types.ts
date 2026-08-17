@@ -105,3 +105,10 @@ export interface BlogSummary {
   preview: string;
   readingTime: string;
 }
+
+/** Aggregate counts for the homepage hero. Mirrors the backend's BlogStats
+ *  (GET /api/blogs/stats). */
+export interface BlogStats {
+  total: number;
+  since?: number;
+}
