@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/store/auth";
 import { useToast } from "@/store/toast";
 import { rules, check } from "@/lib/validation";
+import { EyeIcon } from "@/components/ui/EyeIcon";
 
 type Mode = "login" | "signup";
 
@@ -25,6 +26,7 @@ function AccountModal({
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -170,15 +172,27 @@ function AccountModal({
               <span className="font-body text-xs uppercase tracking-wide text-ink-soft">
                 Password
               </span>
-              <input
-                type="password"
-                name="password"
-                autoComplete={isLogin ? "current-password" : "new-password"}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="border-b border-grid-strong bg-transparent py-1.5 font-body text-ink outline-none placeholder:text-ink-soft/50 focus:border-marker"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  autoComplete={isLogin ? "current-password" : "new-password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full border-b border-grid-strong bg-transparent py-1.5 pr-8 font-body text-ink outline-none placeholder:text-ink-soft/50 focus:border-marker"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
+                  tabIndex={-1}
+                  className="absolute inset-y-0 right-0 flex w-8 items-center justify-center text-ink-soft hover:text-ink"
+                >
+                  <EyeIcon open={showPassword} />
+                </button>
+              </div>
             </label>
 
             {isLogin && (
