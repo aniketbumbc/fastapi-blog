@@ -20,9 +20,9 @@ const FLOW = [
 
 export default function AboutPage() {
   return (
-    <div className="bg-[#f3efe6]">
+    <div className="notebook-lined min-h-screen">
       {/* ---- Hero ---- */}
-      <section className="notebook-lined relative border-b border-neutral-300/70">
+      <section className="relative">
         <span aria-hidden className="absolute inset-y-0 left-[90px] w-px bg-margin-line/70" />
         <div className="mx-auto max-w-3xl px-6 py-16 pl-[120px]">
           <p className="font-body text-[17px] italic text-ink-soft">About this notebook</p>
