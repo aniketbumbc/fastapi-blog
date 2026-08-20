@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from auth import CurrentUser
 
 from database import get_db
@@ -25,7 +26,11 @@ async def list_blogs(
     limit: Annotated[int, Query(ge=1, le=100)] = 20,
 ):
     result = await db.execute(
-        select(Blog).order_by(Blog.date_posted.desc()).offset(skip).limit(limit)
+        select(Blog)
+        .options(selectinload(Blog.user))
+        .order_by(Blog.date_posted.desc())
+        .offset(skip)
+        .limit(limit)
     )
     blogs = result.scalars().all()
     return [to_summary(b) for b in blogs]

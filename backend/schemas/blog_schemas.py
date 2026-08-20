@@ -82,6 +82,8 @@ class BlogSummary(BaseModel):
     publishedAt: str
     preview: str
     readingTime: str
+    author: str
+    authorAvatarUrl: str | None = None
 
 
 class BlogStats(BaseModel):

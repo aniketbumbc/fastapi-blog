@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { BlogSummary } from "@/lib/blog/types";
+import Avatar from "@/components/ui/Avatar";
 
 interface PostCardProps {
   post: BlogSummary;
@@ -13,7 +14,10 @@ export function PostCard({ post, onDelete }: PostCardProps) {
     <div className="group relative h-full overflow-hidden rounded-xl border border-neutral-300/70 bg-highlight shadow-[0_10px_24px_-12px_rgba(0,0,0,0.35)] transition-shadow hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.45)]">
       <Link href={`/blog/${post.slug}`} className="block h-full bg-highlight">
         <span aria-hidden className="absolute inset-y-0 left-7 w-px bg-margin-line/70" />
-        <div className="relative h-full py-6 pl-11 pr-6 bg-highlight shadow-[0_8px_18px_-6px_rgba(0,0,0,0.4)]">
+        <div className="absolute left-3 top-6 z-10 -rotate-6 rounded-full ring-2 ring-white shadow-[0_4px_10px_-2px_rgba(0,0,0,0.4)]">
+          <Avatar src={post.authorAvatarUrl} alt={post.author} size={36} />
+        </div>
+        <div className="relative h-full py-6 pl-16 pr-6 bg-highlight shadow-[0_8px_18px_-6px_rgba(0,0,0,0.4)]">
           {post.kicker && (
             <p className="font-body text-[13px] italic text-ink-soft">{post.kicker}</p>
           )}

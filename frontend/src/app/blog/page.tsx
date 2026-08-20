@@ -61,6 +61,7 @@ export default function BlogIndexPage() {
                   publishedAt: p.publishedAt,
                   preview: previewText(p),
                   readingTime: readingTime(p),
+                  author: p.author,
                 }}
                 onDelete={remove}
               />

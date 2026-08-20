@@ -2,9 +2,10 @@ from datetime import datetime
 
 from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, func
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
+from models.user_model import User
 
 
 class Blog(Base):
@@ -31,3 +32,4 @@ class Blog(Base):
     )
     # Optional owner link for auth on the write endpoints later.
     user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
+    user: Mapped[User | None] = relationship()

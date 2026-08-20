@@ -29,6 +29,13 @@ def reading_time(blocks: list[dict]) -> str:
     return f"{max(1, round(words / 200))} min read"
 
 
+def _avatar_url(blog) -> str | None:
+    if blog.user is None:
+        return None
+    image_path = blog.user.image_path
+    return image_path if image_path != "Image not found" else None
+
+
 def to_summary(blog) -> BlogSummary:
     blocks = blog.blocks or []
     return BlogSummary(
@@ -40,6 +47,8 @@ def to_summary(blog) -> BlogSummary:
         publishedAt=blog.date_posted.isoformat(),
         preview=preview_text(blocks),
         readingTime=reading_time(blocks),
+        author=blog.author_name,
+        authorAvatarUrl=_avatar_url(blog),
     )
 
 

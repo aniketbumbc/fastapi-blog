@@ -104,6 +104,8 @@ export interface BlogSummary {
   publishedAt: string;
   preview: string;
   readingTime: string;
+  author: string;
+  authorAvatarUrl?: string;
 }
 
 /** Aggregate counts for the homepage hero. Mirrors the backend's BlogStats
