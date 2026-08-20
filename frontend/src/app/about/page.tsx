@@ -20,10 +20,10 @@ const FLOW = [
 
 export default function AboutPage() {
   return (
-    <div className="notebook-lined min-h-screen">
+    <div className="notebook-lined relative min-h-screen">
+      <span aria-hidden className="absolute inset-y-0 left-[90px] w-px bg-margin-line/70" />
       {/* ---- Hero ---- */}
-      <section className="relative">
-        <span aria-hidden className="absolute inset-y-0 left-[90px] w-px bg-margin-line/70" />
+      <section>
         <div className="mx-auto max-w-3xl px-6 py-16 pl-[120px]">
           <p className="font-body text-[17px] italic text-ink-soft">About this notebook</p>
           <h1 className="mt-2 font-display text-5xl font-bold leading-[0.95] text-marker md:text-6xl">
