@@ -6,8 +6,10 @@ import type { BlogStats } from "@/lib/blog/types";
 import { fetchBlogStats } from "@/lib/blog/api";
 import { RecentEntries } from "@/components/recententries/recententries";
 import { AccountModalTrigger } from "@/components/accountmodal/accountmodal";
+import { useAuth } from "@/store/auth";
 
 export default function HomePage() {
+  const { currentUser } = useAuth();
   const [stats, setStats] = useState<BlogStats | null>(null);
 
   useEffect(() => {
@@ -35,12 +37,14 @@ export default function HomePage() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <AccountModalTrigger
-                mode="signup"
-                className="rounded-md bg-[#5fa32b] px-5 py-3 font-body font-medium text-white hover:brightness-95"
-              >
-                Create an account
-              </AccountModalTrigger>
+              {!currentUser && (
+                <AccountModalTrigger
+                  mode="signup"
+                  className="rounded-md bg-[#5fa32b] px-5 py-3 font-body font-medium text-white hover:brightness-95"
+                >
+                  Create an account
+                </AccountModalTrigger>
+              )}
               {/* <Link
                 href="/blog"
                 className="rounded-md border border-neutral-400 bg-[#faf7ee] px-5 py-3 font-body text-ink hover:bg-neutral-100"
