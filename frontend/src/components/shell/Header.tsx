@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/store/auth";
 import { useToast } from "@/store/toast";
+import { usePostHeaderActions } from "@/store/postHeaderActions";
 import Avatar from "@/components/ui/Avatar";
 import { AccountModalTrigger } from "@/components/accountmodal/accountmodal";
 
@@ -13,6 +14,7 @@ export default function Header() {
   const push = useToast((s) => s.push);
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { slug: postSlug, owner: postOwner, onDelete: onDeletePost } = usePostHeaderActions();
 
   return (
     <header className="sticky top-0 z-30 border-b border-neutral-300/70 bg-[#faf7ee]/95 backdrop-blur">
@@ -26,9 +28,26 @@ export default function Header() {
         <div className="flex items-center gap-3">
           {currentUser ? (
             <>
+              {postOwner && postSlug && (
+                <>
+                  <Link
+                    href={`/blog/${postSlug}/edit`}
+                    className="cursor-pointer rounded-md bg-[#5fa32b] px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => onDeletePost?.()}
+                    className="cursor-pointer rounded-md bg-marker px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
               <Link
                 href="/blog/new"
-                className="rounded-md bg-[#5fa32b] px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
+                className="cursor-pointer rounded-md bg-[#5fa32b] px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
               >
                 Start writing
               </Link>

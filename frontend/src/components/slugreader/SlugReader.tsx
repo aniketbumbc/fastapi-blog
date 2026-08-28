@@ -8,6 +8,7 @@ import { fetchBlogBySlug, deleteBlog } from "@/lib/blog/api";
 import { BookReader } from "@/components/filpbook/BookReader";
 import { useAuth } from "@/store/auth";
 import { useToast } from "@/store/toast";
+import { usePostHeaderActions } from "@/store/postHeaderActions";
 import Modal from "@/components/ui/Modal";
 import Loader from "@/components/ui/Loader";
 
@@ -20,6 +21,8 @@ export function SlugReader({ slug }: { slug: string }) {
   const { currentUser, isOwner, token } = useAuth();
   const push = useToast((s) => s.push);
   const router = useRouter();
+  const setPostHeaderActions = usePostHeaderActions((s) => s.setPostHeaderActions);
+  const clearPostHeaderActions = usePostHeaderActions((s) => s.clearPostHeaderActions);
 
   useEffect(() => {
     let cancelled = false;
@@ -37,6 +40,18 @@ export function SlugReader({ slug }: { slug: string }) {
     };
   }, [slug]);
 
+  const owner = state.status === "found" && !!currentUser && isOwner(state.post.userId ?? "");
+
+  useEffect(() => {
+    if (owner) {
+      setPostHeaderActions({ slug, owner: true, onDelete: () => setConfirmDelete(true) });
+    } else {
+      clearPostHeaderActions();
+    }
+
+    return () => clearPostHeaderActions();
+  }, [owner, slug, setPostHeaderActions, clearPostHeaderActions]);
+
   if (state.status === "loading") {
     return <Loader />;
   }
@@ -53,8 +68,6 @@ export function SlugReader({ slug }: { slug: string }) {
     );
   }
 
-  const owner = !!currentUser && isOwner(state.post.userId ?? "");
-
   const confirmDeletePost = async () => {
     setDeleting(true);
     const result = await deleteBlog(slug, token);
@@ -70,24 +83,6 @@ export function SlugReader({ slug }: { slug: string }) {
 
   return (
     <>
-      {owner && (
-        <div className="fixed right-6 top-20 z-40 flex gap-2">
-          <Link
-            href={`/blog/${slug}/edit`}
-            className="rounded-md bg-[#5fa32b] px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
-          >
-            Edit
-          </Link>
-          <button
-            type="button"
-            onClick={() => setConfirmDelete(true)}
-            className="rounded-md bg-marker px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
-          >
-            Delete
-          </button>
-        </div>
-      )}
-
       <BookReader post={state.post} startNumber={24} />
 
       <Modal
