@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Enables the `dark:` variant, toggled by a `.dark` class on <html> (see app/layout.tsx). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ---- Design tokens -> Tailwind utilities (bg-paper, text-ink, font-display, ...) ---- */
 @theme {
   --color-paper:        #FBFCF5;
@@ -14,11 +17,31 @@
   --color-hole:         #E7E7DE;
   --color-ring:         #B9BCB4;
   --color-folio:        #8A97A6;
+  --color-accent:       #5FA32B;
+  --color-canvas:       #F3EFE6;
 
   /* Wired to next/font CSS variables (see app/layout.tsx). */
   --font-display: var(--font-caveat), cursive;
   --font-body:    var(--font-kalam), cursive;
   --font-mono:    var(--font-jetbrains), ui-monospace, monospace;
+}
+
+/* ---- Night notebook: same tokens, dark-appropriate values ---- */
+:root.dark {
+  --color-paper:        #161F29;
+  --color-grid:         #223047;
+  --color-grid-strong:  #2B3E58;
+  --color-ink:          #DCE6F0;
+  --color-ink-soft:     #9FB2C7;
+  --color-marker:       #FF7A63;
+  --color-marker-soft:  #FF9686;
+  --color-highlight:    #dd04f5;
+  --color-margin-line:  #6B4A46;
+  --color-hole:         #10161E;
+  --color-ring:         #45505C;
+  --color-folio:        #7C8CA0;
+  --color-accent:       #7CC24A;
+  --color-canvas:       #0B1117;
 }
 
 :root {

@@ -29,7 +29,7 @@ export default function Input({ label, error, valid, hint, labelRight, className
           id={inputId}
           type={isPassword ? (visible ? "text" : "password") : type}
           className={cn(
-            "h-11 w-full rounded-md border bg-white px-3 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-soft/50 focus:border-marker",
+            "h-11 w-full rounded-md border bg-paper px-3 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-soft/50 focus:border-marker",
             isPassword && "pr-10",
             error ? "border-marker" : valid ? "border-emerald-600" : "border-grid-strong",
             className

@@ -18,10 +18,10 @@ export default function BlogIndexPage() {
   };
 
   return (
-    <main className="min-h-screen bg-neutral-50 p-6 md:p-10">
+    <main className="min-h-screen bg-neutral-50 p-6 md:p-10 dark:bg-paper">
       <div className="mx-auto max-w-2xl">
         <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-neutral-900">Published posts</h1>
+          <h1 className="text-xl font-semibold text-neutral-900 dark:text-ink">Published posts</h1>
           <Link
             href="/blog/new"
             className="rounded-md bg-emerald-700 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-600"
@@ -35,7 +35,7 @@ export default function BlogIndexPage() {
             <Loader />
           </div>
         ) : posts.length === 0 ? (
-          <p className="text-neutral-500">
+          <p className="text-neutral-500 dark:text-ink-soft">
             Nothing published yet.{" "}
             <Link href="/blog/new" className="underline">
               Write your first post
@@ -43,14 +43,14 @@ export default function BlogIndexPage() {
             .
           </p>
         ) : (
-          <ul className="divide-y divide-neutral-200 rounded-lg border border-neutral-200 bg-white">
+          <ul className="divide-y divide-neutral-200 rounded-lg border border-neutral-200 bg-white dark:divide-grid-strong dark:border-grid-strong dark:bg-paper">
             {posts.map((p) => (
               <li key={p.slug} className="flex items-center justify-between gap-4 p-4">
                 <Link href={`/blog/${p.slug}`} className="min-w-0 flex-1">
-                  <span className="block truncate font-medium text-neutral-900">
+                  <span className="block truncate font-medium text-neutral-900 dark:text-ink">
                     {p.title}
                   </span>
-                  <span className="block truncate text-sm text-neutral-500">
+                  <span className="block truncate text-sm text-neutral-500 dark:text-ink-soft">
                     /blog/{p.slug} · {p.blocks.length} blocks · {p.sectionCount} sections
                   </span>
                 </Link>

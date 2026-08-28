@@ -55,15 +55,15 @@ export default function AvatarUploader({ src, onUpload, onRemove }: Props) {
         }}
         className={cn(
           "flex flex-col items-center gap-3 rounded-md border-2 border-dashed p-5 text-center transition-colors",
-          dragOver ? "border-[#5fa32b] bg-highlight/30" : "border-neutral-300"
+          dragOver ? "border-accent bg-highlight/30" : "border-grid-strong"
         )}
       >
         <Avatar src={src} size={96} />
 
         {uploading ? (
           <div className="w-full">
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-200">
-              <div className="h-full bg-[#5fa32b] transition-[width]" style={{ width: `${progress}%` }} />
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-grid">
+              <div className="h-full bg-accent transition-[width]" style={{ width: `${progress}%` }} />
             </div>
             <p className="mt-1.5 font-mono text-xs text-ink-soft">Uploading… {progress}% · {fileName}</p>
           </div>

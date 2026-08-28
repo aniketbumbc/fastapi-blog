@@ -20,7 +20,7 @@ export default function BlogIndexPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#ece8dd] p-6 md:p-10">
+    <main className="min-h-screen bg-canvas p-6 md:p-10">
       <div className="mx-auto max-w-5xl">
         <div className="mb-8 flex items-center justify-between">
           <div>
@@ -29,7 +29,7 @@ export default function BlogIndexPage() {
           </div>
           <Link
             href="/blog/new"
-            className="rounded-md bg-[#5fa32b] px-4 py-2 text-sm font-medium text-white hover:brightness-95"
+            className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-white hover:brightness-95"
           >
             New post
           </Link>

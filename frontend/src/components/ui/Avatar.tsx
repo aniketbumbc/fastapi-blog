@@ -6,7 +6,7 @@ export default function Avatar({ src, size = 38, alt = "", ring }: { src?: strin
       className={cn(
         "inline-block shrink-0 overflow-hidden rounded-full",
         !src && "placeholder-stripes",
-        ring && "ring-2 ring-[#5fa32b] ring-offset-2"
+        ring && "ring-2 ring-accent ring-offset-2"
       )}
       style={{ width: size, height: size }}
     >

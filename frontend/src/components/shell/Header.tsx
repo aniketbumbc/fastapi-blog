@@ -6,8 +6,25 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/store/auth";
 import { useToast } from "@/store/toast";
 import { usePostHeaderActions } from "@/store/postHeaderActions";
+import { useTheme } from "@/store/theme";
 import Avatar from "@/components/ui/Avatar";
 import { AccountModalTrigger } from "@/components/accountmodal/accountmodal";
+
+function ThemeToggle() {
+  const mode = useTheme((s) => s.mode);
+  const toggle = useTheme((s) => s.toggle);
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      className="focus-ring flex h-9 w-9 items-center justify-center rounded-full bg-grid text-ink-soft hover:bg-grid-strong hover:text-ink"
+      aria-label={mode === "dark" ? "Switch to day mode" : "Switch to night mode"}
+    >
+      {mode === "dark" ? "☀️" : "🌙"}
+    </button>
+  );
+}
 
 export default function Header() {
   const { currentUser, logout } = useAuth();
@@ -17,7 +34,7 @@ export default function Header() {
   const { slug: postSlug, owner: postOwner, onDelete: onDeletePost } = usePostHeaderActions();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-neutral-300/70 bg-[#faf7ee]/95 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-grid-strong/70 bg-paper/95 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <div className="flex items-center gap-8">
           <Link href="/" className="font-display text-2xl font-bold text-ink">
@@ -32,7 +49,7 @@ export default function Header() {
                 <>
                   <Link
                     href={`/blog/${postSlug}/edit`}
-                    className="cursor-pointer rounded-md bg-[#5fa32b] px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
+                    className="cursor-pointer rounded-md bg-accent px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
                   >
                     Edit
                   </Link>
@@ -47,10 +64,11 @@ export default function Header() {
               )}
               <Link
                 href="/blog/new"
-                className="cursor-pointer rounded-md bg-[#5fa32b] px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
+                className="cursor-pointer rounded-md bg-accent px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
               >
                 Start writing
               </Link>
+              <ThemeToggle />
               <div className="relative">
                 <button
                   type="button"
@@ -63,7 +81,7 @@ export default function Header() {
                 {menuOpen && (
                   <>
                     <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                    <div className="notebook-paper book-shell absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-md border border-neutral-300/70 p-1.5">
+                    <div className="notebook-paper book-shell absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-md border border-grid-strong/70 p-1.5">
                       <div className="px-3 py-2">
                         <p className="font-body text-sm font-medium text-ink">{currentUser.username}</p>
                         <p className="font-body text-xs text-ink-soft">@{currentUser.handle}</p>
@@ -94,15 +112,16 @@ export default function Header() {
             </>
           ) : (
             <>
+              <ThemeToggle />
               <AccountModalTrigger
                 mode="login"
-                className="rounded-md border border-neutral-400 px-4 py-2 font-body text-sm text-ink hover:bg-neutral-100"
+                className="rounded-md border border-ink-soft/40 px-4 py-2 font-body text-sm text-ink hover:bg-grid"
               >
                 Log in
               </AccountModalTrigger>
               <AccountModalTrigger
                 mode="signup"
-                className="rounded-md bg-[#5fa32b] px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
+                className="rounded-md bg-accent px-4 py-2 font-body text-sm font-medium text-white hover:brightness-95"
               >
                 Create an account
               </AccountModalTrigger>

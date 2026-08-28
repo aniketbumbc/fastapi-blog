@@ -49,7 +49,7 @@ export function BlockRenderer({ block }: { block: Block }) {
       // snippet and lets it scroll; in the auto-height linear fallback the
       // percentage max-height is ignored, so the whole snippet shows.
       return (
-        <pre className="mb-5 mt-1.5 max-h-full overflow-auto rounded-md border-[1.5px] border-ink-soft bg-white/55 px-3.5 py-3 font-mono text-[13.5px] leading-[1.5] text-ink shadow-[2px_2px_0_rgba(78,107,140,0.18)]">
+        <pre className="mb-5 mt-1.5 max-h-full overflow-auto rounded-md border-[1.5px] border-ink-soft bg-paper/55 px-3.5 py-3 font-mono text-[13.5px] leading-[1.5] text-ink shadow-[2px_2px_0_rgba(78,107,140,0.18)]">
           <code>{block.code}</code>
         </pre>
       );

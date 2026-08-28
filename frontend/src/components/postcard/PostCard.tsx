@@ -11,10 +11,10 @@ interface PostCardProps {
 export function PostCard({ post, onDelete }: PostCardProps) {
   const tag = post.tags?.[0] ?? null;
   return (
-    <div className="group relative h-full overflow-hidden rounded-xl border border-neutral-300/70 bg-highlight shadow-[0_10px_24px_-12px_rgba(0,0,0,0.35)] transition-shadow hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.45)]">
+    <div className="group relative h-full overflow-hidden rounded-xl border border-grid-strong/70 bg-highlight shadow-[0_10px_24px_-12px_rgba(0,0,0,0.35)] transition-shadow hover:shadow-[0_16px_32px_-12px_rgba(0,0,0,0.45)]">
       <Link href={`/blog/${post.slug}`} className="block h-full bg-highlight">
         <span aria-hidden className="absolute inset-y-0 left-7 w-px bg-margin-line/70" />
-        <div className="absolute left-3 top-6 z-10 -rotate-6 rounded-full ring-2 ring-white shadow-[0_4px_10px_-2px_rgba(0,0,0,0.4)]">
+        <div className="absolute left-3 top-6 z-10 -rotate-6 rounded-full ring-2 ring-paper shadow-[0_4px_10px_-2px_rgba(0,0,0,0.4)]">
           <Avatar src={post.authorAvatarUrl} alt={post.author} size={36} />
         </div>
         <div className="relative h-full py-6 pl-16 pr-6 bg-highlight shadow-[0_8px_18px_-6px_rgba(0,0,0,0.4)]">
@@ -58,7 +58,7 @@ export function PostCard({ post, onDelete }: PostCardProps) {
       {onDelete && (
         <button
           onClick={() => onDelete(post.slug)}
-          className="absolute right-3 top-3 z-20 rounded bg-white/70 px-2 py-0.5 text-xs text-red-600 opacity-0 transition-opacity hover:bg-white group-hover:opacity-100"
+          className="absolute right-3 top-3 z-20 rounded bg-paper/70 px-2 py-0.5 text-xs text-marker opacity-0 transition-opacity hover:bg-paper group-hover:opacity-100"
         >
           Delete
         </button>

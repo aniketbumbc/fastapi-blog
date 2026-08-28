@@ -87,7 +87,7 @@ function AccountModal({
       onClick={onClose}
     >
       <div
-        className="notebook-paper book-shell relative w-full max-w-md overflow-hidden rounded-md border border-neutral-300/70"
+        className="notebook-paper book-shell relative w-full max-w-md overflow-hidden rounded-md border border-grid-strong/70"
         onClick={(e) => e.stopPropagation()}
       >
         <span aria-hidden className="notebook-margin-rule left-12" />
@@ -102,7 +102,7 @@ function AccountModal({
         </button>
 
         {/* tabs */}
-        <div className="flex gap-6 border-b border-neutral-300/70 pl-16 pr-14 pt-5">
+        <div className="flex gap-6 border-b border-grid-strong/70 pl-16 pr-14 pt-5">
           <button
             type="button"
             onClick={() => switchMode("login")}
@@ -208,7 +208,7 @@ function AccountModal({
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 rounded-md bg-[#5fa32b] px-5 py-2.5 font-body font-medium text-white hover:brightness-95 disabled:opacity-60"
+              className="mt-2 rounded-md bg-accent px-5 py-2.5 font-body font-medium text-white hover:brightness-95 disabled:opacity-60"
             >
               {loading ? (isLogin ? "Logging in…" : "Creating account…") : isLogin ? "Log in" : "Create an account"}
             </button>

@@ -19,8 +19,8 @@ type View = "preview" | "json";
 type Props = { mode: "create" | "edit"; initial?: Post };
 
 const field =
-  "w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 outline-none focus:border-neutral-500";
-const label = "mb-1 block text-xs font-medium uppercase tracking-wide text-neutral-500";
+  "w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 outline-none focus:border-neutral-500 dark:border-grid-strong dark:bg-paper dark:text-ink dark:focus:border-ink-soft";
+const label = "mb-1 block text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-ink-soft";
 
 export default function BlogEditor({ mode, initial }: Props) {
   const isEdit = mode === "edit";
@@ -102,12 +102,12 @@ export default function BlogEditor({ mode, initial }: Props) {
   return (
     <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
       {/* ---- Editor ---- */}
-      <div className="flex flex-col gap-4 overflow-y-auto border-r border-neutral-200 bg-neutral-50 p-5">
+      <div className="flex flex-col gap-4 overflow-y-auto border-r border-neutral-200 bg-neutral-50 p-5 dark:border-grid-strong dark:bg-paper">
         <div>
-          <h1 className="text-lg font-semibold text-neutral-900">{isEdit ? "Edit book post" : "New book post"}</h1>
-          <p className="text-sm text-neutral-500">
-            Write markdown. Use a lone <code className="rounded bg-neutral-200 px-1">===</code> line
-            for a section break, and <code className="rounded bg-neutral-200 px-1">==text==</code> for
+          <h1 className="text-lg font-semibold text-neutral-900 dark:text-ink">{isEdit ? "Edit book post" : "New book post"}</h1>
+          <p className="text-sm text-neutral-500 dark:text-ink-soft">
+            Write markdown. Use a lone <code className="rounded bg-neutral-200 px-1 dark:bg-grid">===</code> line
+            for a section break, and <code className="rounded bg-neutral-200 px-1 dark:bg-grid">==text==</code> for
             the highlighter.
           </p>
         </div>
@@ -116,7 +116,7 @@ export default function BlogEditor({ mode, initial }: Props) {
           <div>
             <span className={label}>Slug</span>
             <input
-              className={`${field} ${isEdit ? "cursor-not-allowed bg-neutral-100 text-neutral-500" : ""}`}
+              className={`${field} ${isEdit ? "cursor-not-allowed bg-neutral-100 text-neutral-500 dark:bg-grid dark:text-ink-soft" : ""}`}
               value={meta.slug}
               onChange={update("slug")}
               disabled={isEdit}
@@ -152,7 +152,7 @@ export default function BlogEditor({ mode, initial }: Props) {
         <div className="flex min-h-[320px] flex-1 flex-col">
           <span className={label}>Markdown</span>
           <textarea
-            className="flex-1 resize-none rounded-md border border-neutral-300 bg-white p-3 font-mono text-[13px] leading-relaxed text-neutral-900 outline-none focus:border-neutral-500"
+            className="flex-1 resize-none rounded-md border border-neutral-300 bg-white p-3 font-mono text-[13px] leading-relaxed text-neutral-900 outline-none focus:border-neutral-500 dark:border-grid-strong dark:bg-paper dark:text-ink dark:focus:border-ink-soft"
             value={markdown}
             onChange={(e) => setMarkdown(e.target.value)}
             spellCheck={false}
@@ -160,7 +160,7 @@ export default function BlogEditor({ mode, initial }: Props) {
         </div>
 
         {publishError && (
-          <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{publishError}</p>
+          <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-marker/10 dark:text-marker">{publishError}</p>
         )}
 
         <div className="flex flex-wrap gap-2">
@@ -179,17 +179,17 @@ export default function BlogEditor({ mode, initial }: Props) {
           </button>
           <button
             onClick={() => copy(toMockFile(post), "file")}
-            className="rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-800 hover:bg-neutral-100"
+            className="rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-800 hover:bg-neutral-100 dark:border-grid-strong dark:bg-paper dark:text-ink dark:hover:bg-grid"
           >
             {copied === "file" ? "Copied!" : "Copy as mock-post.ts"}
           </button>
           <Link
             href={isEdit ? `/blog/${initial!.slug}` : "/blog"}
-            className="self-center text-sm font-medium text-neutral-600 underline hover:text-neutral-900"
+            className="self-center text-sm font-medium text-neutral-600 underline hover:text-neutral-900 dark:text-ink-soft dark:hover:text-ink"
           >
             {isEdit ? "Cancel" : "All posts"}
           </Link>
-          <span className="self-center text-xs text-neutral-500">
+          <span className="self-center text-xs text-neutral-500 dark:text-ink-soft">
             {post.blocks.length} blocks · {post.sectionCount} sections
           </span>
         </div>

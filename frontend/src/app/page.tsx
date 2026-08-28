@@ -17,9 +17,9 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="bg-[#f3efe6]">
+    <div className="bg-canvas">
       {/* ---- Hero ---- */}
-      <section className="notebook-lined relative border-b border-neutral-300/70">
+      <section className="notebook-lined relative border-b border-grid-strong/70">
         <span aria-hidden className="absolute inset-y-0 left-[90px] w-px bg-margin-line/70" />
         <div className="mx-auto max-w-6xl px-6 py-16 pl-[120px]">
           <div className="relative">
@@ -40,7 +40,7 @@ export default function HomePage() {
               {!currentUser && (
                 <AccountModalTrigger
                   mode="signup"
-                  className="rounded-md bg-[#5fa32b] px-5 py-3 font-body font-medium text-white hover:brightness-95"
+                  className="rounded-md bg-accent px-5 py-3 font-body font-medium text-white hover:brightness-95"
                 >
                   Create an account
                 </AccountModalTrigger>

@@ -3,6 +3,7 @@ import { Caveat, Kalam, JetBrains_Mono } from "next/font/google";
 import Header from "@/components/shell/Header";
 import Footer from "@/components/shell/Footer";
 import AuthHydrator from "@/components/shell/AuthHydrator";
+import ThemeHydrator from "@/components/shell/ThemeHydrator";
 import "./globals.css";
 import type { Metadata } from "next";
 
@@ -31,16 +32,31 @@ const jetbrains = JetBrains_Mono({
   variable: "--font-jetbrains",
 });
 
+// Runs before paint so the page never flashes the wrong theme: reads the
+// persisted choice, or falls back to the OS preference when none is saved.
+const themeInitScript = `(function () {
+  try {
+    var stored = JSON.parse(localStorage.getItem('theme-storage'));
+    var mode = stored && stored.state && stored.state.mode;
+    if (!mode) mode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.classList.toggle('dark', mode === 'dark');
+  } catch (e) {}
+})();`;
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
       className={`${caveat.variable} ${kalam.variable} ${jetbrains.variable}`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="flex min-h-screen flex-col">
         <AuthHydrator />
+        <ThemeHydrator />
         <Header />
-        <main className="flex-1 bg-[#f3efe6]">{children}</main>
+        <main className="flex-1 bg-canvas">{children}</main>
         <Footer />
       </body>
     </html>

@@ -10,7 +10,7 @@ export default function Textarea({ label, counter, error, className, id, ...rest
       <textarea
         id={id}
         className={cn(
-          "min-h-[220px] resize-y rounded-md border bg-white p-3 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-soft/50 focus:border-marker",
+          "min-h-[220px] resize-y rounded-md border bg-paper p-3 font-body text-sm text-ink outline-none transition-colors placeholder:text-ink-soft/50 focus:border-marker",
           error ? "border-marker" : "border-grid-strong",
           className
         )}

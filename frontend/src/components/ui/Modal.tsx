@@ -25,7 +25,7 @@ export default function Modal({ open, onClose, icon, title, description, confirm
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-[#22221c]/60 p-4 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="notebook-paper book-shell w-full max-w-[420px] rounded-md border border-neutral-300/70 p-6"
+        className="notebook-paper book-shell w-full max-w-[420px] rounded-md border border-grid-strong/70 p-6"
         onClick={(e) => e.stopPropagation()}
       >
         {icon && <div className="mb-3 grid h-11 w-11 place-items-center rounded-md bg-marker/10 text-lg text-marker">{icon}</div>}
