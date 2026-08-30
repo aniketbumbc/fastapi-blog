@@ -217,7 +217,7 @@ export default function BlogEditor({ mode, initial }: Props) {
               Add a title, slug, and some content to see the book.
             </p>
           ) : view === "preview" ? (
-            <BookReader post={post} startNumber={24} />
+            <BookReader post={post} startNumber={1} />
           ) : (
             <pre className="whitespace-pre-wrap break-words rounded-md bg-neutral-900 p-4 font-mono text-xs leading-relaxed text-neutral-100">
               {json}
