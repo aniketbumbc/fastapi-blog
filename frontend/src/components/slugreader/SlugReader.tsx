@@ -83,7 +83,7 @@ export function SlugReader({ slug }: { slug: string }) {
 
   return (
     <>
-      <BookReader post={state.post} startNumber={24} />
+      <BookReader post={state.post} startNumber={1} />
 
       <Modal
         open={confirmDelete}
