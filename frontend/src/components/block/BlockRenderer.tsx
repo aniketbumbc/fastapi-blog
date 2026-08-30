@@ -1,6 +1,49 @@
 import type { Block } from "@/lib/types";
 
 /**
+ * One list item. Carries its own font/line-height classes (rather than
+ * relying on inheritance from the parent <ol>/<ul>) so it renders identically
+ * whether inside the real list or measured standalone by the pagination
+ * engine's per-item height probe (see FilpReader's measuring pass).
+ */
+export function ListItem({
+  item,
+  index,
+  ordered,
+  startIndex = 0,
+}: {
+  item: string;
+  index: number;
+  ordered: boolean;
+  startIndex?: number;
+}) {
+  if (ordered) {
+    return (
+      <li className="nb-inline relative mb-2.5 pl-8 font-body text-[18px] leading-[1.5] text-ink">
+        <span
+          aria-hidden
+          className="absolute left-0 font-display font-bold text-marker"
+        >
+          {index + 1 + startIndex}.
+        </span>
+        <span dangerouslySetInnerHTML={{ __html: item }} />
+      </li>
+    );
+  }
+  return (
+    <li className="nb-inline relative mb-2.5 pl-[22px] font-body text-[18px] leading-[1.5] text-ink">
+      <span
+        aria-hidden
+        className="absolute left-0.5 top-[-2px] text-[20px] text-marker"
+      >
+        •
+      </span>
+      <span dangerouslySetInnerHTML={{ __html: item }} />
+    </li>
+  );
+}
+
+/**
  * Renders one block. Pure/server component.
  *
  * SECURITY NOTE: paragraph/quote/list HTML is injected via
@@ -59,15 +102,13 @@ export function BlockRenderer({ block }: { block: Block }) {
         return (
           <ol className="mb-4 ml-1 list-none font-body text-[18px] leading-[1.5] text-ink">
             {block.items.map((item, i) => (
-              <li key={i} className="nb-inline relative mb-2.5 pl-8">
-                <span
-                  aria-hidden
-                  className="absolute left-0 font-display font-bold text-marker"
-                >
-                  {i + 1}.
-                </span>
-                <span dangerouslySetInnerHTML={{ __html: item }} />
-              </li>
+              <ListItem
+                key={i}
+                item={item}
+                index={i}
+                ordered
+                startIndex={block.startIndex}
+              />
             ))}
           </ol>
         );
@@ -75,15 +116,7 @@ export function BlockRenderer({ block }: { block: Block }) {
       return (
         <ul className="mb-4 ml-1 list-none font-body text-[18px] leading-[1.5] text-ink">
           {block.items.map((item, i) => (
-            <li key={i} className="nb-inline relative mb-2.5 pl-[22px]">
-              <span
-                aria-hidden
-                className="absolute left-0.5 top-[-2px] text-[20px] text-marker"
-              >
-                •
-              </span>
-              <span dangerouslySetInnerHTML={{ __html: item }} />
-            </li>
+            <ListItem key={i} item={item} index={i} ordered={false} />
           ))}
         </ul>
       );

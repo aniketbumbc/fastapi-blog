@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import type { Post } from "@/lib/types";
 import { FilpPage } from "./FilpPage";
-import { BlockRenderer } from "@/components/block/BlockRenderer";
+import { BlockRenderer, ListItem } from "@/components/block/BlockRenderer";
 import { useBookMode } from "@/app/hooks/Usebookmode";
 import { useMeasuredHeights } from "@/app/hooks/Usemeasuredheights";
 import { usePrefersReducedMotion } from "@/app/hooks/Useprefersreducedmotion";
-import { paginate } from "@/lib/paginate";
+import { paginate, listItemKey } from "@/lib/paginate";
 import { FilpBook } from "./FilpBook";
 
 const RATIO = 80 / 62; // page height / width
@@ -89,8 +89,20 @@ export function FilpReader({
         style={{ width: box?.w ?? pageW ?? 560 }}
       >
         {post.blocks.map((b) => (
-          <div key={b.id} data-block-id={b.id} style={{ display: "flow-root" }}>
-            <BlockRenderer block={b} />
+          <div key={b.id}>
+            <div data-block-id={b.id} style={{ display: "flow-root" }}>
+              <BlockRenderer block={b} />
+            </div>
+            {b.type === "list" &&
+              b.items.map((item, i) => (
+                <div
+                  key={`${b.id}-item-${i}`}
+                  data-block-id={listItemKey(b.id, i)}
+                  style={{ display: "flow-root" }}
+                >
+                  <ListItem item={item} index={i} ordered={b.ordered} />
+                </div>
+              ))}
           </div>
         ))}
       </div>

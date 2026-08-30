@@ -12,7 +12,10 @@ export type User = {
 
 // ---- Blocks --------------------------------------------------------------
 // Every block is atomic to the reflow engine: it either fits on the current
-// page or gets pushed whole to the next one. A block is never split mid-way.
+// page or gets pushed whole to the next one. A block is never split mid-way,
+// with one exception — `list` blocks may be split at an item boundary by the
+// pagination engine (see paginate.ts), producing continuation chunks that
+// carry `startIndex` for correct ordered numbering.
 //
 // Inline formatting (bold, inline code, links, the highlighter) lives INSIDE a
 // block as a pre-rendered HTML string produced server-side. Allowed inline
@@ -56,6 +59,11 @@ export interface ListBlock extends BlockBase {
   ordered: boolean;
   /** Each item is inline HTML (same allowed tags as ParagraphBlock). */
   items: string[];
+  /** Set when this is a continuation chunk produced by pagination splitting
+   *  a longer list across a page break. Ordered numbering resumes from
+   *  `startIndex + 1` instead of 1. Absent/0 for the first (or a whole,
+   *  unsplit) chunk. */
+  startIndex?: number;
 }
 
 export interface QuoteBlock extends BlockBase {
