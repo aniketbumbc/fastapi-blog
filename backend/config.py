@@ -10,7 +10,7 @@ class Settings(BaseSettings):
 
     secret_key: SecretStr
     algorithm: str = "HS256"
-    access_token_mins: int = 20
+    access_token_mins: int = 120
     database_url: str
     direct_database_url: str
 
