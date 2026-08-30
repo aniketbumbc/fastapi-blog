@@ -19,8 +19,8 @@ export default function HomePage() {
   return (
     <div className="bg-canvas">
       {/* ---- Hero ---- */}
-      <section className="notebook-lined relative border-b border-grid-strong/70">
-        <span aria-hidden className="absolute inset-y-0 left-[90px] w-px bg-margin-line/70" />
+      <section className="bg-canvas relative border-b border-grid-strong/70">
+        <span aria-hidden className="" />
         <div className="mx-auto max-w-6xl px-6 py-16 pl-[120px]">
           <div className="relative">
             <p className="font-body text-[17px] italic text-ink-soft">
