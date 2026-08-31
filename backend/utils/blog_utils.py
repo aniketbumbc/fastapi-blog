@@ -6,12 +6,20 @@ def _strip_html(html: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", html)).strip()
 
 
-def preview_text(blocks: list[dict], max_len: int = 150) -> str:
+def preview_text(blocks: list[dict], max_len: int = 300) -> str:
     for b in blocks:
         if b.get("type") == "paragraph":
             text = _strip_html(b.get("html", ""))
             return f"{text[:max_len].rstrip()}…" if len(text) > max_len else text
     return ""
+
+
+def summary_text(blocks: list[dict], max_lines: int = 10) -> str:
+    text = " ".join(
+        _strip_html(b.get("html", "")) for b in blocks if b.get("type") == "paragraph"
+    )
+    sentences = re.split(r"(?<=[.!?])\s+", text.strip())
+    return " ".join(s for s in sentences[:max_lines] if s)
 
 
 def reading_time(blocks: list[dict]) -> str:
@@ -46,6 +54,7 @@ def to_summary(blog) -> BlogSummary:
         tags=blog.tags,
         publishedAt=blog.date_posted.isoformat(),
         preview=preview_text(blocks),
+        summary=summary_text(blocks),
         readingTime=reading_time(blocks),
         author=blog.author_name,
         authorAvatarUrl=_avatar_url(blog),

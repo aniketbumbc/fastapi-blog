@@ -81,6 +81,7 @@ class BlogSummary(BaseModel):
     tags: list[str] | None = None
     publishedAt: str
     preview: str
+    summary: str
     readingTime: str
     author: str
     authorAvatarUrl: str | None = None
