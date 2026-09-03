@@ -90,8 +90,6 @@ function AccountModal({
         className="notebook-paper book-shell relative w-full max-w-md overflow-hidden rounded-md border border-grid-strong/70"
         onClick={(e) => e.stopPropagation()}
       >
-        <span aria-hidden className="notebook-margin-rule left-12" />
-
         <button
           type="button"
           onClick={onClose}
