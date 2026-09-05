@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { BookReader } from "@/components/filpbook/BookReader";
+import { ThumbnailBook } from "@/components/pagination/Thumbnailbook";
 import { createBlog, updateBlog } from "@/lib/blog/api";
 import type { Post } from "@/lib/blog/types";
 import { useAuth } from "@/store/auth";
@@ -102,7 +102,7 @@ export default function BlogEditor({ mode, initial }: Props) {
   return (
     <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
       {/* ---- Editor ---- */}
-      <div className="flex flex-col gap-4 overflow-y-auto border-r border-neutral-200 bg-neutral-50 p-5 dark:border-grid-strong dark:bg-paper">
+      <div className="flex flex-col gap-4 border-r border-neutral-200 bg-neutral-50 p-5 dark:border-grid-strong dark:bg-paper">
         <div>
           <h1 className="text-lg font-semibold text-neutral-900 dark:text-ink">{isEdit ? "Edit book post" : "New book post"}</h1>
           <p className="text-sm text-neutral-500 dark:text-ink-soft">
@@ -196,7 +196,7 @@ export default function BlogEditor({ mode, initial }: Props) {
       </div>
 
       {/* ---- Output ---- */}
-      <div className="flex flex-col bg-[#6b6f63]">
+      <div className="sticky top-0 flex h-screen min-h-0 flex-col self-start bg-[#6b6f63]">
         <div className="flex gap-1 border-b border-black/20 bg-black/10 p-2">
           {(["preview", "json"] as View[]).map((v) => (
             <button
@@ -211,13 +211,13 @@ export default function BlogEditor({ mode, initial }: Props) {
           ))}
         </div>
 
-        <div className="flex-1 overflow-auto p-4">
+        <div className="min-h-0 flex-1 overflow-auto p-4">
           {!ready ? (
             <p className="p-8 text-center font-body text-white/80">
               Add a title, slug, and some content to see the book.
             </p>
           ) : view === "preview" ? (
-            <BookReader post={post} startNumber={1} />
+            <ThumbnailBook post={post} startNumber={1} />
           ) : (
             <pre className="whitespace-pre-wrap break-words rounded-md bg-neutral-900 p-4 font-mono text-xs leading-relaxed text-neutral-100">
               {json}
