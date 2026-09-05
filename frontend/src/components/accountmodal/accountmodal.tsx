@@ -7,6 +7,7 @@ import { useAuth } from "@/store/auth";
 import { useToast } from "@/store/toast";
 import { rules, check } from "@/lib/validation";
 import { EyeIcon } from "@/components/ui/EyeIcon";
+import Avatar from "@/components/ui/Avatar";
 
 type Mode = "login" | "signup";
 
@@ -87,45 +88,54 @@ function AccountModal({
       onClick={onClose}
     >
       <div
-        className="notebook-paper book-shell relative w-full max-w-md overflow-hidden rounded-md border border-grid-strong/70"
+        className="relative w-full max-w-md overflow-hidden rounded-xl border border-grid-strong/70 bg-highlight shadow-[0_10px_24px_-12px_rgba(0,0,0,0.35)]"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-4 top-4 z-10 font-display text-2xl leading-none text-ink-soft hover:text-marker"
+          className="absolute right-4 top-4 z-20 font-display text-2xl leading-none text-ink-soft hover:text-marker"
         >
           ×
         </button>
 
-        {/* tabs */}
-        <div className="flex gap-6 border-b border-grid-strong/70 pl-16 pr-14 pt-5">
-          <button
-            type="button"
-            onClick={() => switchMode("login")}
-            className={`pb-3 font-body text-sm font-medium ${
-              isLogin ? "border-b-2 border-marker text-ink" : "text-ink-soft hover:text-ink"
-            }`}
-          >
-            Log in
-          </button>
-          <button
-            type="button"
-            onClick={() => switchMode("signup")}
-            className={`pb-3 font-body text-sm font-medium ${
-              !isLogin ? "border-b-2 border-marker text-ink" : "text-ink-soft hover:text-ink"
-            }`}
-          >
-            Create account
-          </button>
+        <span aria-hidden className="absolute inset-y-0 left-7 w-px bg-margin-line/70" />
+        <div className="absolute left-3 top-6 z-10 -rotate-6 rounded-full ring-2 ring-paper shadow-[0_4px_10px_-2px_rgba(0,0,0,0.4)]">
+          <Avatar size={36} />
         </div>
 
-        <div className="px-14 py-7 pl-16">
-          <h2 className="font-display text-3xl font-bold text-marker">
+        <div className="relative py-6 pl-16 pr-7">
+          {/* tabs */}
+          <div className="flex gap-5">
+            <button
+              type="button"
+              onClick={() => switchMode("login")}
+              className={`font-body text-[13px] font-medium ${
+                isLogin ? "text-marker" : "text-ink-soft hover:text-ink"
+              }`}
+            >
+              Log in
+            </button>
+            <button
+              type="button"
+              onClick={() => switchMode("signup")}
+              className={`font-body text-[13px] font-medium ${
+                !isLogin ? "text-marker" : "text-ink-soft hover:text-ink"
+              }`}
+            >
+              Create account
+            </button>
+          </div>
+
+          <h2 className="relative mt-1 w-fit font-display text-[27px] font-bold leading-[1.05] text-marker">
             {isLogin ? "Welcome back" : "Start your notebook"}
+            <span
+              aria-hidden
+              className="absolute -bottom-1 left-0 right-0 h-[5px] rotate-[-0.5deg] rounded-[40%_60%_55%_45%] bg-marker/70"
+            />
           </h2>
-          <p className="mt-1 font-body text-sm text-ink-soft">
+          <p className="mt-4 font-body text-[15px] leading-snug text-ink">
             {isLogin ? "Pick up where you left off." : "Jot down your details to claim a page."}
           </p>
 

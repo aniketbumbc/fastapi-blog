@@ -1,0 +1,3 @@
+# CLAUDE.md
+
+- DO NOT TEST AND RUN THE APP.
