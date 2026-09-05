@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import type { BlogStats } from "@/lib/blog/types";
-import { fetchBlogStats } from "@/lib/blog/api";
+import type { BlogStats, BlogSummary } from "@/lib/blog/types";
+import { fetchBlogStats, fetchBlogSummaries } from "@/lib/blog/api";
 import { RecentEntries } from "@/components/recententries/recententries";
 import { AccountModalTrigger } from "@/components/accountmodal/accountmodal";
 import { useAuth } from "@/store/auth";
@@ -11,9 +11,13 @@ import { useAuth } from "@/store/auth";
 export default function HomePage() {
   const { currentUser } = useAuth();
   const [stats, setStats] = useState<BlogStats | null>(null);
+  const [latestPost, setLatestPost] = useState<BlogSummary | null>(null);
 
   useEffect(() => {
     fetchBlogStats().then(setStats).catch(() => setStats(null));
+    fetchBlogSummaries(1)
+      .then((posts) => setLatestPost(posts[0] ?? null))
+      .catch(() => setLatestPost(null));
   }, []);
 
   return (
@@ -54,12 +58,18 @@ export default function HomePage() {
             </div>
 
             {/* sticky note */}
-            <div className="pointer-events-none absolute right-0 top-25 hidden w-64 rotate-2 bg-highlight p-4 shadow-[0_8px_18px_-6px_rgba(0,0,0,0.4)] lg:block">
-              <p className="font-display text-xl font-bold text-marker">New</p>
-              <p className="mt-1 font-body text-[15px] leading-snug text-ink">
-                Entry 07 — URL shortener, start to finish.
-              </p>
-            </div>
+            {latestPost && (
+              <Link
+                href={`/blog/${latestPost.slug}`}
+                className="pointer-events-auto absolute right-0 top-25 hidden w-64 rotate-2 bg-highlight p-4 shadow-[0_8px_18px_-6px_rgba(0,0,0,0.4)] lg:block"
+              >
+                <p className="font-display text-xl font-bold text-marker">New</p>
+                <p className="mt-1 font-body text-[15px] leading-snug text-ink">
+                  {latestPost.kicker ? `${latestPost.kicker} — ` : ""}
+                  {latestPost.title}
+                </p>
+              </Link>
+            )}
           </div>
         </div>
       </section>
