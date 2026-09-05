@@ -81,30 +81,39 @@ export default function Header() {
                 {menuOpen && (
                   <>
                     <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                    <div className="notebook-paper book-shell absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-md border border-grid-strong/70 p-1.5">
-                      <div className="px-3 py-2">
-                        <p className="font-body text-sm font-medium text-ink">{currentUser.username}</p>
-                        <p className="font-body text-xs text-ink-soft">@{currentUser.handle}</p>
+                    <div className="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl border border-grid-strong/70 bg-highlight shadow-[0_10px_24px_-12px_rgba(0,0,0,0.35)]">
+                      <span aria-hidden className="absolute inset-y-0 left-5 w-px bg-margin-line/70" />
+                      <div className="relative py-3 pl-8 pr-3">
+                        <p className="relative w-fit font-display text-lg font-bold leading-none text-marker">
+                          {currentUser.username}
+                          <span
+                            aria-hidden
+                            className="absolute -bottom-0.5 left-0 right-0 h-[4px] rotate-[-0.5deg] rounded-[40%_60%_55%_45%] bg-marker/70"
+                          />
+                        </p>
+                        <p className="mt-1.5 font-body text-xs text-ink-soft">@{currentUser.handle}</p>
+                        <div className="mt-3 -mx-3 border-t border-grid-strong/70 pt-1.5">
+                          <Link
+                            href="/settings"
+                            onClick={() => setMenuOpen(false)}
+                            className="block rounded-md px-3 py-2 font-body text-sm text-ink hover:bg-paper/40"
+                          >
+                            Settings
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              logout();
+                              setMenuOpen(false);
+                              push("Signed out");
+                              router.push("/");
+                            }}
+                            className="w-full rounded-md px-3 py-2 text-left font-body text-sm text-marker hover:bg-paper/40"
+                          >
+                            Log out
+                          </button>
+                        </div>
                       </div>
-                      <Link
-                        href="/settings"
-                        onClick={() => setMenuOpen(false)}
-                        className="block rounded-md px-3 py-2 font-body text-sm text-ink hover:bg-grid"
-                      >
-                        Settings
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          logout();
-                          setMenuOpen(false);
-                          push("Signed out");
-                          router.push("/");
-                        }}
-                        className="w-full rounded-md px-3 py-2 text-left font-body text-sm text-marker hover:bg-grid"
-                      >
-                        Log out
-                      </button>
                     </div>
                   </>
                 )}
