@@ -36,3 +36,5 @@ pnpm-debug.log*
 
 # Logs
 *.log
+
+future-improvement.md
