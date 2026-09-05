@@ -13,7 +13,7 @@ const MAX_PAGE_W = 600;
 const MIN_PAGE_W = 220;
 const SAFETY_PX = 6;
 const RAIL_W = 96; // thumbnail width, px
-const RAIL_GAP = 16; // px, matches gap-4
+const RAIL_GAP = 24; // px, matches gap-6
 
 const clamp = (v: number, lo: number, hi: number) =>
   Math.max(lo, Math.min(hi, v));
@@ -83,7 +83,7 @@ export function ThumbnailBook({
   const thumbH = Math.round(pageH * thumbScale);
 
   return (
-    <div ref={containerRef} className="flex h-full w-full gap-4">
+    <div ref={containerRef} className="flex h-full w-full gap-6 overflow-x-hidden">
       {/* Probe: one blank reference page, sized like the real thing. */}
       {pageW > 0 && (
         <div
@@ -128,7 +128,7 @@ export function ThumbnailBook({
       ) : (
         <>
           {/* Thumbnail rail */}
-          <div className="shrink-0 overflow-y-auto" style={{ width: RAIL_W }}>
+          <div className="shrink-0 overflow-y-auto overflow-x-hidden" style={{ width: RAIL_W }}>
             <div className="flex flex-col items-center gap-3 py-1">
               {pages.map((group, i) => (
                 <button

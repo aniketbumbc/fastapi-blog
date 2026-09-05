@@ -105,11 +105,36 @@ export default function BlogEditor({ mode, initial }: Props) {
       <div className="flex flex-col gap-4 border-r border-neutral-200 bg-neutral-50 p-5 dark:border-grid-strong dark:bg-paper">
         <div>
           <h1 className="text-lg font-semibold text-neutral-900 dark:text-ink">{isEdit ? "Edit book post" : "New book post"}</h1>
-          <p className="text-sm text-neutral-500 dark:text-ink-soft">
-            Write markdown. Use a lone <code className="rounded bg-neutral-200 px-1 dark:bg-grid">===</code> line
-            for a section break, and <code className="rounded bg-neutral-200 px-1 dark:bg-grid">==text==</code> for
-            the highlighter.
-          </p>
+          <p className="text-sm text-neutral-500 dark:text-ink-soft">Write markdown:</p>
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-1 list-disc pl-4 text-sm text-neutral-500 dark:text-ink-soft">
+            <li>
+              <code className="rounded bg-neutral-200 px-1 dark:bg-grid">==text==</code> for the highlighter
+            </li>
+            <li>
+              <code className="rounded bg-neutral-200 px-1 dark:bg-grid"># Heading</code> /{" "}
+              <code className="rounded bg-neutral-200 px-1 dark:bg-grid">## Subheading</code>
+            </li>
+            <li>
+              <code className="rounded bg-neutral-200 px-1 dark:bg-grid">**bold**</code> and{" "}
+              <code className="rounded bg-neutral-200 px-1 dark:bg-grid">*italic*</code>
+            </li>
+            <li>
+              <code className="rounded bg-neutral-200 px-1 dark:bg-grid">{"> quote"}</code> — great for pulling
+              book passages
+            </li>
+            <li>
+              <code className="rounded bg-neutral-200 px-1 dark:bg-grid">- item</code> for bullets,{" "}
+              <code className="rounded bg-neutral-200 px-1 dark:bg-grid">1. item</code> for numbered
+            </li>
+            <li>
+              <code className="rounded bg-neutral-200 px-1 dark:bg-grid">{"[text](url)"}</code> for links,{" "}
+              <code className="rounded bg-neutral-200 px-1 dark:bg-grid">{"![alt](url)"}</code> for images
+            </li>
+            <li>
+              <code className="rounded bg-neutral-200 px-1 dark:bg-grid">`code`</code> inline, or
+              triple-backtick fences
+            </li>
+          </ul>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -211,7 +236,7 @@ export default function BlogEditor({ mode, initial }: Props) {
           ))}
         </div>
 
-        <div className="min-h-0 flex-1 overflow-auto p-4">
+        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-4">
           {!ready ? (
             <p className="p-8 text-center font-body text-white/80">
               Add a title, slug, and some content to see the book.
