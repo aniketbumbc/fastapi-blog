@@ -39,43 +39,43 @@ export function toMockFile(post: Post): string {
 }
 
 /** Pre-filled draft so the form works on first load. Shows === and ==mark==. */
-export const STARTER_MARKDOWN = `# The Read Path Test
+export const STARTER_MARKDOWN = `# Start Here
 
-Every redirect is one lookup. Make that lookup cheap, and the whole system stays fast under load.
+Welcome. This entry is a quick tour of how writing works here. Read it once, then delete everything and make the page your own.
 
-A redirect only needs one thing: the long URL for a given key. So keep the hot keys in **memory** and the database out of the critical path.
+## Just start typing
 
-In practice the flow is a single cache read that almost always hits. ==Cache hit ratio is the metric that matters most here== — everything else is a consequence of it.
+Anything you type becomes a paragraph, like this one. Get the thought down first, tidy it later.
 
-## The request, step by step
+To stress a word, wrap it in **double asterisks**. To run a highlighter across a phrase, use ==double equals==.
 
-\`\`\`bash
-GET /aX9kP2q
-# hit  -> return 301 to the long URL
-# miss -> read KV store, warm cache, return
-\`\`\`
+## Headings keep it organized
 
-1. Client requests the short key.
-2. Redirect service checks the in-memory cache first.
-3. On a hit, respond immediately with a redirect.
-
-## Trade-offs to mention
-
-- **301 vs 302** — 301 caches in the browser, which kills analytics.
-- **LRU eviction** — ~20% of keys serve most of the traffic.
-- **SQL vs KV store** — no joins needed, so KV wins.
+Use one \`#\` for the page title and two \`##\` for the sections under it. Short headings double as your table of contents.
 
 ===
 
-# The Write Path
+# The Building Blocks
 
-Writes are rarer and can afford to be slower. Turn a long URL into a short, unique key and persist it before anyone reads it back.
+The lone \`===\` line above turned the page. Use it whenever you want the reader to flip to a fresh leaf.
 
-1. A long URL comes in.
-2. An ID service issues a unique number and base62-encodes it.
-3. The result is a short 7-character key.
+## Quotes
 
-Using a counter plus base62 avoids the birthday-collision problem you get from hashing and truncating.
+> A note is a conversation with your future self.
 
-> Writes need consistency; reads need speed. Design each path separately.
+## Lists
+
+1. Number your steps when the sequence counts.
+2. Keep each item to a single idea.
+
+- Or use a dash for a plain bullet.
+- Loose, unpolished notes are fine.
+
+## Code
+
+\`\`\`python
+print("hello, margin")  # your first note
+\`\`\`
+
+That is the whole toolkit. ==Now clear this entry and write your first real one.==
 `;
