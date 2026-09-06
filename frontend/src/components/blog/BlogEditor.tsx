@@ -104,7 +104,7 @@ export default function BlogEditor({ mode, initial }: Props) {
       {/* ---- Editor ---- */}
       <div className="flex flex-col gap-4 border-r border-neutral-200 bg-neutral-50 p-5 dark:border-grid-strong dark:bg-paper">
         <div>
-          <h1 className="text-lg font-semibold text-neutral-900 dark:text-ink">{isEdit ? "The Read Path Test" : "New book post"}</h1>
+          <h1 className="text-lg font-semibold text-neutral-900 dark:text-ink">{isEdit ? `Editing "${meta.title}"` : "New book post"}</h1>
           <p className="text-sm text-neutral-500 dark:text-ink-soft">Write markdown:</p>
           <ul className="grid grid-cols-2 gap-x-4 gap-y-1 list-disc pl-4 text-sm text-neutral-500 dark:text-ink-soft">
             <li>
