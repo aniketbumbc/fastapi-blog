@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ThumbnailBook } from "@/components/pagination/Thumbnailbook";
@@ -44,6 +44,7 @@ export default function BlogEditor({ mode, initial }: Props) {
   const [markdown, setMarkdown] = useState(initial?.markdown ?? STARTER_MARKDOWN);
   const [tagsText, setTagsText] = useState(initial?.tags?.join(", ") ?? "system-design");
   const [debounced, setDebounced] = useState(markdown);
+  const baseline = useRef({ meta, markdown, tagsText });
   const [view, setView] = useState<View>("preview");
   const [copied, setCopied] = useState<string | null>(null);
   const [publishing, setPublishing] = useState(false);
@@ -98,6 +99,17 @@ export default function BlogEditor({ mode, initial }: Props) {
   };
 
   const ready = post.slug && post.title && post.blocks.length > 0;
+  const isDirty =
+    markdown !== baseline.current.markdown ||
+    tagsText !== baseline.current.tagsText ||
+    (Object.keys(meta) as (keyof PostMeta)[]).some((k) => meta[k] !== baseline.current.meta[k]);
+
+  const exitHref = isEdit ? `/blog/${initial!.slug}` : "/blog";
+  const handleExit = (e: React.MouseEvent) => {
+    if (isDirty && !window.confirm("You have unsaved changes. Leave without saving?")) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
@@ -209,7 +221,8 @@ export default function BlogEditor({ mode, initial }: Props) {
             {copied === "file" ? "Copied!" : "Copy as mock-post.ts"}
           </button>
           <Link
-            href={isEdit ? `/blog/${initial!.slug}` : "/blog"}
+            href={exitHref}
+            onClick={handleExit}
             className="self-center text-sm font-medium text-neutral-600 underline hover:text-neutral-900 dark:text-ink-soft dark:hover:text-ink"
           >
             {isEdit ? "Cancel" : "All posts"}
