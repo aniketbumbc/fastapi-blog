@@ -11,6 +11,8 @@ import { useToast } from "@/store/toast";
 import {
   buildPost,
   toMockFile,
+  isValidSlug,
+  SLUG_HELP,
   STARTER_MARKDOWN,
   type PostMeta,
 } from "@/lib/blog/buildPost";
@@ -110,7 +112,8 @@ export default function BlogEditor({ mode, initial }: Props) {
     setTimeout(() => setCopied(null), 1500);
   };
 
-  const ready = post.slug && post.title && post.blocks.length > 0;
+  const slugError = !isEdit && meta.slug.trim() && !isValidSlug(meta.slug) ? SLUG_HELP : null;
+  const ready = post.slug && post.title && post.blocks.length > 0 && (isEdit || isValidSlug(meta.slug));
   const isDirty =
     markdown !== baseline.current.markdown ||
     tagsText !== baseline.current.tagsText ||
@@ -165,11 +168,14 @@ export default function BlogEditor({ mode, initial }: Props) {
           <div>
             <span className={label}>Slug</span>
             <input
-              className={`${field} ${isEdit ? "cursor-not-allowed bg-neutral-100 text-neutral-500 dark:bg-grid dark:text-ink-soft" : ""}`}
+              className={`${field} ${isEdit ? "cursor-not-allowed bg-neutral-100 text-neutral-500 dark:bg-grid dark:text-ink-soft" : ""} ${
+                slugError ? "border-red-400 focus:border-red-500 dark:border-marker dark:focus:border-marker" : ""
+              }`}
               value={meta.slug}
               onChange={update("slug")}
               disabled={isEdit}
             />
+            {slugError && <p className="mt-1 text-xs text-red-600 dark:text-marker">{slugError}</p>}
           </div>
           <div>
             <span className={label}>Author</span>

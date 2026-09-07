@@ -12,6 +12,15 @@ export interface PostMeta {
   tags?: string[];
 }
 
+/** Lowercase letters, numbers, and single hyphens between words — no spaces, no uppercase. */
+const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
+export const SLUG_HELP = "Lowercase letters, numbers, and hyphens only (e.g. my-post-title).";
+
+export function isValidSlug(slug: string): boolean {
+  return SLUG_PATTERN.test(slug.trim());
+}
+
 /** Combine metadata + compiled markdown into the Post contract. */
 export function buildPost(meta: PostMeta, markdown: string): Post {
   const { blocks, sectionCount } = compileMarkdown(markdown);
