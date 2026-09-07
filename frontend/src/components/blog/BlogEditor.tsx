@@ -67,7 +67,7 @@ export default function BlogEditor({ mode, initial }: Props) {
 
     setPublishing(true);
     setPublishError(null);
-    const input = { slug: post.slug, title: post.title, subtitle: post.subtitle, kicker: post.kicker, author: post.author, tags: post.tags, markdown: debounced };
+    const input = { slug: post.slug, title: post.title, subtitle: post.subtitle, kicker: post.kicker, author: post.author, tags: post.tags, markdown };
     const result = isEdit ? await updateBlog(initial!.slug, input, token) : await createBlog(input, token);
     setPublishing(false);
 
