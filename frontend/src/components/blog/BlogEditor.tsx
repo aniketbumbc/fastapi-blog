@@ -22,8 +22,11 @@ const field =
   "w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 outline-none focus:border-neutral-500 dark:border-grid-strong dark:bg-paper dark:text-ink dark:focus:border-ink-soft";
 const label = "mb-1 block text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-ink-soft";
 
+const DEFAULT_AUTHOR = "Your Name";
+
 export default function BlogEditor({ mode, initial }: Props) {
   const isEdit = mode === "edit";
+  const currentUser = useAuth((s) => s.currentUser);
   const [meta, setMeta] = useState<PostMeta>(
     initial
       ? {
@@ -38,7 +41,7 @@ export default function BlogEditor({ mode, initial }: Props) {
           title: "Start Here",
           subtitle: "A quick tour of how writing works here",
           kicker: "Guide · Getting Started",
-          author: "Your Name",
+          author: currentUser?.username ?? DEFAULT_AUTHOR,
         },
   );
   const [markdown, setMarkdown] = useState(initial?.markdown ?? STARTER_MARKDOWN);
@@ -79,6 +82,15 @@ export default function BlogEditor({ mode, initial }: Props) {
     const t = setTimeout(() => setDebounced(markdown), 400);
     return () => clearTimeout(t);
   }, [markdown]);
+
+  // Session restores from sessionStorage async, so the logged-in user's name may
+  // not be known yet when this editor mounts. Fill it in once it arrives, but only
+  // while the author field still holds the untouched placeholder.
+  useEffect(() => {
+    if (isEdit || !currentUser || meta.author !== DEFAULT_AUTHOR) return;
+    setMeta((m) => ({ ...m, author: currentUser.username }));
+    baseline.current.meta.author = currentUser.username;
+  }, [isEdit, currentUser, meta.author]);
 
   const post = useMemo(() => {
     const tags = tagsText
