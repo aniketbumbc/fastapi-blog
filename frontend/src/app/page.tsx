@@ -76,9 +76,6 @@ export default function HomePage() {
 
       {/* ---- Recent entries ---- */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <p className="mb-5 font-body text-xs font-semibold uppercase tracking-[0.2em] text-ink-soft">
-          Recent Blogs
-        </p>
         <RecentEntries />
       </section>
     </div>
