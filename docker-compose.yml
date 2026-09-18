@@ -32,6 +32,9 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data       # persists your certs — do not skip
       - caddy_config:/config
+    networks:
+      - default
+      - web
     depends_on:
       - frontend
       - backend
@@ -39,3 +42,7 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+
+networks:
+  web:
+    external: true
